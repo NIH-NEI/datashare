@@ -1,0 +1,120 @@
+					REX 6.0 README
+					  26 Jan 01
+
+1.) Unpacking REX
+
+	REX is stored as an encrypted 'zip' file.  To decrypt REX you must supply the
+correct password to the 'unzip' program.  The 'unzip' program is available from
+ftp.qnx.com under the directory /usr/free/qnx4/os/utils/archivers, or in the 'config.tar'
+file.
+
+2.) Motherboard
+
+	Choose a motherboard that has ISA slots that permit full-sized cards.  Some
+motherboards have the cpu or SIMMS positioned in such a way that some or all of the ISA
+slots are blocked from permitting a full-sized card.  Some of the cards used by REX are
+full-sized:  the NIATMIO16-X a/d, the 5 port digital i/o card, and the 8 or 16 channel
+d/a.  The Analogics a/d is not full-sized, nor is the 6 channel d/a.  So make sure you
+have enough full-sized slots for your configuration.
+
+	Soon the ISA bus will be obsolete.  We are in the process of supporting a/d,
+digital i/o, d/a cards on the PCI bus.  Also make sure you have enough total slots.  The
+ethernet, video, and disk controller may be on the PCI bus, or on the motherboard.  Most
+Pentium motherboards have a mix of ISA and PCI slots with some slots shared.
+
+3.) Disk controller
+
+	I believe it is best to use a SCSI controller instead of on-board EIDE.  This is
+because the SCSI controller uses bus-mastering to free up the cpu during disk transfers.  
+We are using the Adaptec controllers on the PCI bus.  QNX does not offer a bus-mastering
+EIDE driver.  Also note that QNX doesn't support all SCSI controllers.  Make sure the
+controller you have is supported by calling QNX.  For example, QNX currently does not
+support the Adaptec 2940UW DUAL controller that ships with some Dell machines, or the
+2940U2W controller.  It does support the Adaptec 2940UW (single) controller.
+
+4.) Ethernet
+
+	QNX does not have drivers for all makes of Ethernet controllers.  Make sure that
+you choose an Ethernet controller for which QNX has a driver.  You will need to call QNX
+and find out what drivers are currently available.  The Ethernet controller can be either
+built into the motherboard, on the PCI bus, or on the ISA bus.  QNX does support the 3C905
+that is on many Dell motherboards.
+
+5.) Configuration and Interrupts
+
+	Many of the laboratory interfaces are not Plug-and-Play. Therefore their
+interrupts, DMA's and I/O addresses must be reserved so that the Plug-and-Play BIOS wont
+give them away to other cards when the computer is booted.  This is usually done in one of
+two ways- thru the BIOS setup screens or by the ICU (Intel Configuration Utility).  
+Failure to do this can result in REX failing to run, or intermittent problems.  Be
+especially aware that sound cards (often a part of the motherboard) can use a lot of
+resources, and interrupt 5.  The default configurations of REX have the a/d converter on
+interrupt 10, which is usually free.
+
+	Also please note that you must edit 'cnf.h' in the 'hdr' directory to reflect your
+hardware devices and desired options.  All of the user-editable items are close to the top
+of the file.  Then to make REX one goes to the directory 'int'.  The first time you make
+REX, or any time you change 'cnf.h',  do a 'make complete'.  Thereafter a 
+'make sf=yourspotfile' is sufficient.
+
+6.) Recommendations for PC's to Run REX
+
+	We are currently running REX on Dell machines, though I think REX will run on most
+PC's.  Always use the latest version of QNX.  You can look at the file 'versions_list' in
+the config.tar file to see the current versions in use at the time of the distribution.
+
+6.) PCI Support
+
+	We are currently running some digital I/O cards on the PCI bus, as well as some
+counter-timer cards for catching units from the Spectrum box.  If you are running out of
+ISA slots and wish to run these cards on PCI, please contact Art Hays at NIH,
+
+7.) QNX 4.25 Kernel Rebuild
+
+	You must rebuild your kernel for REX.  See the file "boot/README_REX" in
+config.tar.
+
+8.) Make command differences
+
+	You must use an older version of the make command called 'qmake' to build REX.
+Since this is no longer shipped with QNX we have placed it in the config.tar file.  To
+install this version, rename the current '/bin/make' that is shipped with QNX 4.25 as
+"/bin/gmake".  Then take the qmake in the config.tar file and install it in /bin as
+"/bin/qmake".  Then make a link in /bin for 'make' to point to 'qmake':
+
+	ln -s /bin/qmake /bin/make
+
+	You will also need to place the 'default.mk' in the config.tar file in
+/usr/include/make.
+
+9.) Updated SCSI driver
+
+	Please replace your /bin/Fsys.aha7scsi with the one in the config.tar file.  This
+one fixes some latency bugs.
+
+10.) Timing latency issue in REX 6.
+
+	There is a latency issue in REX versions 6 and lower (this is not present in REX
+7.1, the Photon version). In the past year a few users have noted some irregular timing
+latencies in their Spot files.  The symptom was that sometimes states seemed to be entered
+after a delay of 2 to 5 msec.  The cause of the state set latency was the running line
+display- when it wraps to the left side of the screen there can be a 2 to 5 msec delay in
+processing the state set.  This turned out to be caused by the time required to write the
+running line signal labels on the display.  These labels are rewritten every time the
+display wraps back to the left side of the screen.  To avoid this latency go to the
+signals menus and change the titles to one character strings.  This will greatly reduce
+the amount of time required to draw them on the screen.  Note that the time accuracy is
+not affected by this- after the delay of 2 to 5 msec the next state is entered and the
+clock is advanced by the same 2 to 5 msec so it stays accurate.
+
+	Also, some users noticed that occasionally with the Analogics a/d that errors
+would occur when accessing the disk or transferring over the ethernet while the clock was
+running.  This problem was tracked down to a bug in the Adaptec SCSI driver.  It was
+blocking DMA access from the a/d converter.  We have placed the patched version of this
+driver in the config.tar file.  I advise users to get this new driver and rebuild their
+QNX kernel with it.
+
+
+
+
+

@@ -1,0 +1,23 @@
+'''
+ *  NOTICE:  This code was developed by the Laboratory of
+ *  Sensorimotor Research in the National Eye Institute,
+ *  a branch of the U.S. Government.  This code is
+ *  distributed without copyright restrictions.  No
+ *  individual, company, organization, etc., may copyright
+ *  this code.  If it is passed on to others, this notice
+ *  must be included.
+ *
+ *  No warranty is implied or offered for the usage of the software.
+ *  
+ *  Any Modifications to this code, especially bug fixes,
+ *  should be reported to pierre.daye@gmail.com.
+ * 
+ *  Pierre M. Daye, Ph.D.
+ *  Laboratory of Sensorimotor Research
+ *  Bldg 49 Rm 2A50
+ *  National Eye Institute, NIH
+ *  9000 Rockville Pike, Bethesda, MD, 20892-4435
+ *  (301) 496-9375.
+ * 
+ *  August 17, 2012
+'''

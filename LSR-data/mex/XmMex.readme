@@ -1,0 +1,2 @@
+To install XmMex for linux, copy the archive to /usr/local, then unzip and untar it.
+If you put it some place else, edit the shell file mmex and change the paths.

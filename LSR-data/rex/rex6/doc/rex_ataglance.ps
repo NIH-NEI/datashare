@@ -1,0 +1,1088 @@
+%!PS-Adobe-1.0
+%%Creator: lsr-vax:art (Art Hays - PSTAFF)
+%%Title: stdin
+%%CreationDate: Tue Jan  2 04:28:29 1996
+%%DocumentFonts: NewCenturySchlbk-Roman NewCenturySchlbk-Italic NewCenturySchlbk-Bold Symbol Times-Roman DIThacks
+%%Pages: (atend)
+%%EndComments
+% Start of pscat.pro -- prolog for troff translator
+% Copyright (c) 1985,1987 Adobe Systems Incorporated. All Rights Reserved. 
+% GOVERNMENT END USERS: See Notice file in TranScript library directory
+% -- probably /usr/lib/ps/Notice
+% RCS: $Header: pscat.pro,v 2.2 87/11/17 16:40:32 byron Rel $
+save /pscatsave exch def
+/$pscat 50 dict def
+$pscat begin
+/fm [1 0 0 1 0 0] def
+/xo 0 def /yo 0 def
+/M /moveto load def
+/R /show load def
+/S {exch currentpoint exch pop moveto show}def
+/T {exch currentpoint pop exch moveto show}def
+/U {3 1 roll moveto show}def
+/siz 0 def
+/font 0 def
+/Z {/siz exch def SF}def
+/F {/font exch def SF}def
+/SF{font 0 ne
+    {catfonts font 1 sub get fm 0 siz put fm 3 siz neg put 
+     fm makefont setfont}if}def
+/BP{save/catsv exch def 0 792 translate 72 432 div dup neg scale 
+  xo yo translate 0 0 moveto}def
+/EP{catsv restore showpage}def
+
+% definitions for PPROC callback functions
+% each PPROC is called with the following number on the stack:
+% pointsize charcode railmag pswidth pschar x y wid
+/$pprocs 50 dict def
+/fractm [.65 0 0 .6 0 0] def
+% fractions
+/PS1{gsave $pprocs begin
+    /wid exch def pop pop pop pop pop /ch exch def /size exch def
+    /pair $pprocs ch get def /cf currentfont def
+    cf fractm makefont setfont
+    0 .3 size mul 6 mul 2 copy neg rmoveto pair 0 get show rmoveto
+    currentfont cf setfont (\244) show setfont
+    pair 1 get show grestore wid .06 div 0 rmoveto end}def
+$pprocs begin
+8#34 [(1)(4)] def
+8#36 [(1)(2)] def
+8#46 [(3)(4)] def
+end
+% DIThacks fonts for some special chars
+50 dict dup begin
+/FontType 3 def
+/FontName /DIThacks def
+/FontMatrix [.001 0.0 0.0 .001 0.0 0.0] def
+/FontBBox [-220 -280 900 900] def% a lie but ...
+/Encoding 256 array def
+0 1 255{Encoding exch /.notdef put}for
+Encoding
+ dup 8#040/space put %space
+ dup 8#110/rc put %right ceil
+ dup 8#111/lt put %left  top curl
+ dup 8#112/bv put %bold vert
+ dup 8#113/lk put %left  mid curl
+ dup 8#114/lb put %left  bot curl
+ dup 8#115/rt put %right top curl
+ dup 8#116/rk put %right mid curl
+ dup 8#117/rb put %right bot curl
+ dup 8#120/rf put %right floor
+ dup 8#121/lf put %left  floor
+ dup 8#122/lc put %left  ceil
+ dup 8#140/sq put %square
+ dup 8#141/bx put %box
+ dup 8#142/ci put %circle
+ dup 8#143/br put %box rule
+ dup 8#144/rn put %root extender
+ dup 8#145/vr put %vertical rule
+ dup 8#146/ob put %outline bullet
+ dup 8#147/bu put %bullet
+ dup 8#150/ru put %rule
+ dup 8#151/ul put %underline
+ pop
+/DITfd 100 dict def
+/BuildChar{0 begin
+ /cc exch def /fd exch def
+ /charname fd /Encoding get cc get def
+ /charwid fd /Metrics get charname get def
+ /charproc fd /CharProcs get charname get def
+ charwid 0 fd /FontBBox get aload pop setcachedevice
+ 40 setlinewidth
+ newpath 0 0 moveto gsave charproc grestore
+ end}def
+/BuildChar load 0 DITfd put
+%/UniqueID 5 def
+/CharProcs 50 dict def
+CharProcs begin
+/space{}def
+/.notdef{}def
+/ru{500 0 rls}def
+/rn{0 750 moveto 500 0 rls}def
+/vr{20 800 moveto 0 -770 rls}def
+/bv{20 800 moveto 0 -1000 rls}def
+/br{20 770 moveto 0 -1040 rls}def
+/ul{0 -250 moveto 500 0 rls}def
+/ob{200 250 rmoveto currentpoint newpath 200 0 360 arc closepath stroke}def
+/bu{200 250 rmoveto currentpoint newpath 200 0 360 arc closepath fill}def
+/sq{80 0 rmoveto currentpoint dround newpath moveto
+    640 0 rlineto 0 640 rlineto -640 0 rlineto closepath stroke}def
+/bx{80 0 rmoveto currentpoint dround newpath moveto
+    640 0 rlineto 0 640 rlineto -640 0 rlineto closepath fill}def
+/ci{355 333 rmoveto currentpoint newpath 333 0 360 arc
+    50 setlinewidth stroke}def
+
+/lt{20 -200 moveto 0 550 rlineto currx 800 2cx s4 add exch s4 a4p stroke}def
+/lb{20 800 moveto 0 -550 rlineto currx -200 2cx s4 add exch s4 a4p stroke}def
+/rt{20 -200 moveto 0 550 rlineto currx 800 2cx s4 sub exch s4 a4p stroke}def
+/rb{20 800 moveto 0 -500 rlineto currx -200 2cx s4 sub exch s4 a4p stroke}def
+/lk{20 800 moveto 20 300 -280 300 s4 arcto pop pop 1000 sub
+    currentpoint stroke moveto
+    20 300 4 2 roll s4 a4p 20 -200 lineto stroke}def
+/rk{20 800 moveto 20 300 320 300 s4 arcto pop pop 1000 sub
+    currentpoint stroke moveto
+    20 300 4 2 roll s4 a4p 20 -200 lineto stroke}def
+/lf{20 800 moveto 0 -1000 rlineto s4 0 rls}def
+/rf{20 800 moveto 0 -1000 rlineto s4 neg 0 rls}def
+/lc{20 -200 moveto 0 1000 rlineto s4 0 rls}def
+/rc{20 -200 moveto 0 1000 rlineto s4 neg 0 rls}def
+end
+
+/Metrics 50 dict def Metrics begin
+/.notdef 0 def
+/space 500 def
+/ru 500 def
+/br 0 def
+/lt 250 def
+/lb 250 def
+/rt 250 def
+/rb 250 def
+/lk 250 def
+/rk 250 def
+/rc 250 def
+/lc 250 def
+/rf 250 def
+/lf 250 def
+/bv 250 def
+/ob 350 def
+/bu 350 def
+/ci 750 def
+/bx 750 def
+/sq 750 def
+/rn 500 def
+/ul 500 def
+/vr 0 def
+end
+
+DITfd begin
+/s2 500 def /s4 250 def /s3 333 def
+/a4p{arcto pop pop pop pop}def
+/2cx{2 copy exch}def
+/rls{rlineto stroke}def
+/currx{currentpoint pop}def
+/dround{transform round exch round exch itransform} def
+end
+end
+/DIThacks exch definefont pop
+/catfonts [
+	/NewCenturySchlbk-Roman findfont
+	/NewCenturySchlbk-Italic findfont
+	/NewCenturySchlbk-Bold findfont
+	/Symbol findfont
+	/Times-Roman findfont
+	/DIThacks findfont
+	] def
+%%EndProlog
+%%Page: ? 1
+BP
+3 F
+72 Z
+1460 438(REX)U
+1648(At)S
+1756(a)S
+1824(Glance)S
+2086(...)S
+60 Z
+432 582(1.)U
+524(Data)S
+693(Acquisit)S
+950(ion)S
+1 F
+582 675(REX)U
+733(continuall)S
+1011(y)S
+2 F
+1066(acquires)S
+1 F
+1322(samples)S
+1570(from)S
+1723(the)S
+1836(a/d)S
+1944(converter)S
+2229(and)S
+2356(stores)S
+2544(the)S
+2656(data)S
+2802(to)S
+2877(a)S
+2932(cir-)S
+432 819(u)U
+432 747(cular)U
+596(memory)S
+843(buffer.)S
+1069(This)S
+1214(data)S
+1360(is)S
+2 F
+1428(store)S
+1561(d)S
+1 F
+1620(to)S
+1695(disk)S
+1833(when)S
+2006(a)S
+2 F
+2061(window)S
+1 F
+2301(is)S
+2369(opened.)S
+2625(Data)S
+2783(is)S
+2851(stored)S
+469 819(ntil)U
+589(the)S
+703(window)S
+941(is)S
+1011(closed.)S
+1239(Each)S
+1402(window)S
+1639(has)S
+1760(an)S
+1853(associated)S
+2 F
+2161(pre-t)S
+2292(ime)S
+1 F
+2415(and)S
+2 F
+2543(post)S
+2657(-time)S
+1 F
+(.)R
+2859(These)S
+2994 891(e)U
+432 963(w)U
+432 891(times)U
+609(specify)S
+824(additional)S
+1129(data)S
+1277(that)S
+1417(will)S
+1542(be)S
+1629(saved)S
+1811(before)S
+2005(the)S
+2119(window)S
+2357(is)S
+2427(opened)S
+2648(and)S
+2777(after)S
+2934(th)S
+479 963(indow)U
+673(is)S
+746(closed.)S
+978(Data)S
+1141(stored)S
+1341(to)S
+1421(disk)S
+1564(can)S
+1688(originat)S
+1906(e)S
+1963(either)S
+2155(from)S
+2312(an)S
+2409(a/d)S
+2521(converter)S
+2811(or)S
+2894(from)S
+432 1128(*)U
+432 1035(globa)U
+578(l)S
+616(memory)S
+861(variab)S
+1037(les.)S
+582 1128(a/d)U
+689(sample)S
+908(rate)S
+1043(\(acquire)S
+1290(rate\))S
+1445(and)S
+1572(disk)S
+1709(store)S
+1868(rate)S
+2002(can)S
+2120(be)S
+2204(different-)S
+2485(e.g.)S
+2602(a)S
+2656(signal)S
+2843(can)S
+2961(be)S
+432 1293(*)U
+582 1200(sampled)U
+834(at)S
+910(1000Hz)S
+1140(and)S
+1265(stored)S
+1458(to)S
+1531(disk)S
+1667(at)S
+1743(250Hz)S
+582 1293(all)U
+676(rates)S
+842(\(acquire)S
+1092(rate)S
+1230(and)S
+1360(store)S
+1522(rate\))S
+1679(can)S
+1800(be)S
+1887(independently)S
+2308(set)S
+2413(on)S
+2504(a)S
+2561(per)S
+2677(signal)S
+2867(basis;)S
+432 1458(*)U
+582 1365(all)U
+671(signal)S
+837(s)S
+885(are)S
+995(not)S
+1105(required)S
+1362(to)S
+1435(be)S
+1518(acquired)S
+1778(or)S
+1855(stored)S
+2048(at)S
+2124(the)S
+2234(same)S
+2398(rate)S
+582 1458(maxim)U
+771(um)S
+881(a/d)S
+986(sample)S
+1203(rate)S
+1336(\(acquire)S
+1581(rate\))S
+1734(per)S
+1846(channel:)S
+2102(2000Hz)S
+2987 1551(h)U
+432(*)S
+582(overall)S
+797(thruput)S
+1043(to)S
+1123(disk)S
+1265(has)S
+1389(been)S
+1545(tested)S
+1740(to)S
+1819(at)S
+1901(least)S
+2059(16k)S
+2186(samples/sec)S
+2539(on)S
+2632(a)S
+2691(486/33)S
+2899(wit)S
+582 1623(SCSI)U
+746(disk)S
+432 1716(*)U
+582(each)S
+729(signal)S
+915(can)S
+1032(be)S
+1115(identi\256ed)S
+1398(with)S
+1543(an)S
+1633(ascii)S
+1777(string)S
+1962(that)S
+2098(is)S
+2164(avai)S
+2280(labl)S
+2382(e)S
+2432(to)S
+2505(analysi)S
+2704(s)S
+2752(programs)S
+3 F
+432 1860(2.)U
+524(Data)S
+693(File)S
+835(Format)S
+1 F
+582 1953(REX)U
+736(produ)S
+900(ces)S
+1011(only)S
+1154(two)S
+1280(types)S
+1454(of)S
+1530(\256les:)S
+1706(the)S
+3 F
+1822(E-\256le)S
+1 F
+2012(and)S
+2143(the)S
+3 F
+2259(A-\256le)S
+1 F
+2423(.)S
+2486(The)S
+2618(E-\256le)S
+2791(contains)S
+3004 2025(f)U
+432 2097(v)U
+432 2025(short)U
+605(\256xed)S
+766(records)S
+997(that)S
+1140(identify)S
+1380(epochs)S
+1594(or)S
+1678(times)S
+1857(of)S
+1934(occurr)S
+2109(ence.)S
+2297(The)S
+2431(A-\256le)S
+2606(is)S
+2679(composed)S
+2974(o)S
+464 2097(ariabl)U
+626(e)S
+686(length)S
+893(data)S
+1047(records)S
+1251(.)S
+1318(The)S
+1455(E-\256le)S
+1633(indexes)S
+1873(the)S
+1993(A-\256le.)S
+2208(Both)S
+2371(\256les)S
+2513(include)S
+2744(additional)S
+432 2241(i)U
+432 2169(informati)U
+691(on)S
+782(\(such)S
+954(as)S
+1038(sequence)S
+1313(numbers)S
+1581(and)S
+1709(magic)S
+1895(numbers\))S
+2183(that)S
+2322(can)S
+2442(be)S
+2528(used)S
+2681(to)S
+2757(verify)S
+2939(\256le)S
+450 2241(ntegrity.)U
+3 F
+432 2385(3)U
+(.)R
+524(Laboratory)S
+899(Contro)S
+1119(l)S
+1 F
+582 2478(R)U
+(EX)R
+751(includes)S
+1021(a)S
+1094(state-set)S
+1372(interpreter)S
+1719(and)S
+1864(language,)S
+3 F
+2173(Spot)S
+1 F
+(,)R
+2372(for)S
+2489(laborat)S
+2686(ory)S
+2815(control.)S
+432 2622(a)U
+432 2550(Applicati)U
+682(ons)S
+801(are)S
+914(programmed)S
+1292(using)S
+1467(Spot)S
+1616(and)S
+1744(associated)S
+2052(C)S
+2118(functions)S
+2398(\(termed)S
+3 F
+2639(actions)S
+1 F
+(\))R
+2908(that)S
+465 2622(re)U
+553(called)S
+745(from)S
+906(the)S
+1027(state-sets.)S
+1361(Users)S
+1553(can)S
+1681(also)S
+1821(write)S
+1997(custom)S
+2226(actions)S
+2453(in)S
+2539(C.)S
+2649(The)S
+2786(state-set)S
+3004 2694(-)U
+432 2766(p)U
+432 2694(interpreter)U
+769(suppor)S
+961(ts)S
+1042(multi)S
+1191(ple,)S
+1321(independent)S
+1698(state)S
+1864(chains.)S
+2110(Timi)S
+2239(ng)S
+2337(resolution)S
+2644(for)S
+2750(the)S
+2869(inter)S
+467 2766(reter)U
+624(is)S
+690(1msec.)S
+582 2859(R)U
+(EX)R
+735(suppor)S
+927(ts)S
+1003(industry)S
+1265(standard)S
+1541('Opto)S
+1713(22')S
+1816(type)S
+1961(I/O)S
+2075(modules)S
+2331(for)S
+2432(interfacing)S
+2758(with)S
+2907(dev-)S
+432 3003(o)U
+432 2931(ices)U
+560(in)S
+640(the)S
+755(laborat)S
+952(ory.)S
+1102(These)S
+1291(modules)S
+1546(can)S
+1667(interface)S
+1936(with)S
+2085(DC)S
+2199(and)S
+2328(AC)S
+2438(voltag)S
+2606(es)S
+2688(and)S
+2817(provide)S
+462 3003(ptical)U
+636(isola)S
+763(tion)S
+891(between)S
+1141(the)S
+1251(computer)S
+1533(and)S
+1658(the)S
+1768(laborat)S
+1965(ory.)S
+3 F
+432 3147(4.)U
+524(Displays)S
+1 F
+582 3240(REX)U
+732(includes)S
+984(three)S
+1153(displays.)S
+1439(The)S
+3 F
+1568(run)S
+1684(ning)S
+1827(-line)S
+1 F
+1990(display)S
+2211(is)S
+2279(an)S
+2371(oscill)S
+2510(oscope)S
+2712(simula)S
+2899(tion.)S
+432 3384(w)U
+432 3312(The)U
+3 F
+567(window)S
+1 F
+842(display)S
+1069(is)S
+1143(an)S
+1241(x,y)S
+1350(display)S
+1577(suitabl)S
+1767(e)S
+1825(for)S
+1930(showing)S
+2187(eye)S
+2307(position)S
+2554(and)S
+2686(eye)S
+2805(position)S
+479 3384(indows.)U
+737(The)S
+3 F
+870(raster)S
+1 F
+1087(display)S
+1312(shows)S
+1508(on-line)S
+1724(rasters)S
+1946(and)S
+2077(histograms.)S
+2449(This)S
+2598(display)S
+2823(is)S
+2894(com-)S
+3004 3456(-)U
+432 3528(t)U
+432 3456(pletely)U
+647(user)S
+798(customiza)S
+1075(ble)S
+1184(in)S
+1267(terms)S
+1456(of)S
+1534(number)S
+1779(of)S
+1857(rasters,)S
+2098(histograms)S
+2435(displayed,)S
+2744(size,)S
+2893(posi)S
+455 3528(ion,)U
+577(triggers,)S
+831(etc.)S
+3 F
+945 3672(e)U
+432(5.)S
+524(User)S
+691(Inter)S
+852(fac)S
+1 F
+582 3765(Variab)U
+769(les)S
+868(and)S
+996(parameters)S
+1338(in)S
+1415(REX)S
+1565(are)S
+1677(contained)S
+1969(in)S
+2046(menus.)S
+2290(The)S
+2419(contents)S
+2676(of)S
+2748(all)S
+2839(menus)S
+432 3909(i)U
+432 3837(can)U
+552(be)S
+638(saved)S
+819(in)S
+897(ascii)S
+1044(to)S
+1120(a)S
+1176(\256le)S
+1284(\(termed)S
+1525(a)S
+3 F
+1581(root)S
+1 F
+1735(\256le\).)S
+1900(Keyboard)S
+2190(commands)S
+2509(can)S
+2629(also)S
+2761(be)S
+2846(placed)S
+450 3909(n)U
+514(root)S
+651(\256les.)S
+828(REX)S
+983(provides)S
+1244(a)S
+1303(command)S
+1597(to)S
+1676(redirect)S
+1919(input)S
+2095(from)S
+2251(the)S
+2367(keyboard)S
+2648(to)S
+2727(a)S
+2786(root)S
+2922(\256le.)S
+432 4053(\256)U
+432 3981(Therefore,)U
+747(anything)S
+1023(that)S
+1166(can)S
+1290(be)S
+1380(typed)S
+1562(in)S
+1644(at)S
+1727(the)S
+1844(keyboard)S
+2126(can)S
+2250(also)S
+2386(be)S
+2476(contained)S
+2773(in)S
+2855(a)S
+2914(root)S
+469 4053(le.)U
+578(Root)S
+728(\256les)S
+864(can)S
+984(be)S
+1070(nested-)S
+1296(i.e.)S
+1401(a)S
+1457(root)S
+1590(\256le)S
+1698(can)S
+1818(contain)S
+2046(the)S
+2159(command)S
+2450(to)S
+2526(read)S
+2674(another)S
+2914(root)S
+432 4125(\256le.)U
+EP
+%%Page: ? 2
+BP
+1 F
+60 Z
+1671 222(-)U
+1711(2)S
+1764(-)S
+3 F
+432 438(6.)U
+524(PC)S
+636(to)S
+718(PC)S
+830(Commu)S
+1072(nication)S
+1 F
+582 531(REX)U
+733(provides)S
+991(two)S
+1114(methods)S
+1373(for)S
+1473(PC)S
+1579(to)S
+1655(PC)S
+1760(communication.)S
+2242(The)S
+2371(\256rst)S
+2508(system,)S
+3 F
+2741(pcmsg)S
+1 F
+(,)R
+2978(is)S
+432 675(p)U
+432 603(suitabl)U
+622(e)S
+684(for)S
+792(real-ti)S
+961(me.)S
+1112('pcmsg')S
+1342(requires)S
+1603(two)S
+1734(interface)S
+2010(boards)S
+2227(that)S
+2374(include)S
+2607(the)S
+2728(Intel)S
+2892(8255)S
+467 675(arall)U
+596(el)S
+669(interface)S
+939(chip)S
+1081(\(commonly)S
+1406(found)S
+1590(on)S
+1682(digita)S
+1841(l)S
+1884(I/O)S
+1997(boards\).)S
+2264('pcmsg')S
+2487(is)S
+2557(designed)S
+2826(so)S
+2908(that)S
+3007 747(.)U
+432 819(')U
+432 747(the)U
+545(two)S
+668(boards)S
+877(can)S
+997(be)S
+1083(cabled)S
+1282(together)S
+1537(directly,)S
+1787(pin)S
+1900(for)S
+2000(pin,)S
+2130(without)S
+2367(any)S
+2491(external)S
+2743(glue)S
+2882(logi)S
+2980(c)S
+444 819(pcmsg')U
+660(provides)S
+924(an)S
+1023(eight)S
+1192(bit)S
+1295(communications)S
+1775(channel)S
+2023(between)S
+2282(the)S
+2401(PCs.)S
+2578(This)S
+2730(channel)S
+2978(is)S
+3006 891(l)U
+432 963(i)U
+2 F
+432 891(full-duple)U
+705(x)S
+1 F
+(-)R
+777(informati)S
+1036(on)S
+1125(can)S
+1244(travel)S
+1429(in)S
+1506(both)S
+1651(ways)S
+1813(simult)S
+1990(aneously.)S
+2293(The)S
+2421(handshaking)S
+2804(protoco)S
+450 963(s)U
+508(designed)S
+783(to)S
+866(be)S
+959(independent)S
+1336(of)S
+1415(timi)S
+1527(ng)S
+1625(differences)S
+1956(between)S
+2215(the)S
+2334(PCs.)S
+2511(The)S
+2647(programming)S
+2994 1035(e)U
+432 1107(m)U
+432 1035(interface)U
+718(presents)S
+997(a)S
+1071(messaging)S
+1403(model-)S
+1629(messages)S
+1931(are)S
+2061(packaged)S
+2361(and)S
+2506(sent)S
+2664(between)S
+2934(th)S
+485 1107(achines.)U
+764(Messages)S
+1062(include)S
+1296(checksum.)S
+1638(The)S
+1776(second)S
+1994(method)S
+2233(of)S
+2314(communication)S
+2768(is)S
+2845(to)S
+2929(use)S
+3 F
+432 1323(7)U
+1 F
+432 1179(Ethernet)U
+702(with)S
+847(TCP/IP)S
+1072(sockets.)S
+3 F
+467 1323(.)U
+524(REX)S
+680(Structur)S
+951(e)S
+1006(and)S
+1145(Operatin)S
+1428(g)S
+1485(System)S
+1730(Environ)S
+1987(ment)S
+1 F
+3004 1416(-)U
+432 1488(m)U
+582 1416(REX)U
+748(is)S
+832(composed)S
+1138(of)S
+1226(multi)S
+1375(ple)S
+1496(cooperating)S
+2 F
+1855(proces)S
+2028(ses)S
+1 F
+(.)R
+2183(For)S
+2317(example,)S
+2602(keyboard)S
+2894(com)S
+485 1488(ands,)U
+677(writing)S
+921(to)S
+1016(disk,)S
+1191(raster)S
+1401(display,)S
+1659(data)S
+1825(acquisit)S
+2042(ion)S
+2169(are)S
+2301(all)S
+2412(handled)S
+2678(by)S
+2784(different)S
+432 1632(D)U
+432 1560(processes)U
+695(.)S
+764(This)S
+918(architecture,)S
+1305(original)S
+1518(ly)S
+1599(designed)S
+1875(to)S
+1959(run)S
+2091(on)S
+2189(Unix,)S
+2372(is)S
+2449(not)S
+2570(easil)S
+2697(y)S
+2760(ported)S
+2971(to)S
+479 1632(OS.)U
+630(Therefore)S
+930(the)S
+1048(QNX)S
+1213(real-ti)S
+1382(me)S
+1493(operating)S
+1786(system)S
+2008(was)S
+2144(chosed)S
+2359(to)S
+2440(suppor)S
+2632(t)S
+2683(REX)S
+2839(on)S
+2934(the)S
+2994 1704(e)U
+432 1776(a)U
+432 1704(PC.)U
+580(QNX)S
+745(provides)S
+1008(a)S
+1069(Unix)S
+1232(foundation)S
+1560(in)S
+1643(a)S
+1704(real-ti)S
+1873(me)S
+1983(context)S
+2212(with)S
+2364(fast)S
+2495(interrupt)S
+2779(respons)S
+465 1776(nd)U
+557(disk)S
+693(I/O.)S
+3 F
+853 1920(y)U
+432(8.)S
+524(Availabilit)S
+1 F
+582 2013(REX)U
+731(is)S
+798(avai)S
+914(labl)S
+1016(e)S
+1067(free)S
+1195(of)S
+1266(charge)S
+1472(via)S
+1575(executing)S
+1861(a)S
+1914(short)S
+2079(license)S
+2287(agreement)S
+2602(\(the)S
+2732(purp)S
+2866(ose)S
+2974(of)S
+3007 2085(.)U
+432 2157(T)U
+432 2085(this)U
+563(agreement)S
+883(is)S
+954(to)S
+1032(preserve)S
+1296(the)S
+1411(government's)S
+1807(rights)S
+1997(to)S
+2075(REX)S
+2227(and)S
+2356(restrict)S
+2583(re-distribution\))S
+472 2157(he)U
+569(REX)S
+727(manual)S
+968(and)S
+1103(a)S
+1166(copy)S
+1320(of)S
+1400(the)S
+1519(agreement)S
+1843(can)S
+1969(be)S
+2061(obtai)S
+2198(ned)S
+2329(via)S
+2441(anonymous)S
+2787(ftp)S
+2894(from)S
+432 2229(lsr.nei.nih.gov.)U
+EP
+%%Trailer
+pscatsave end restore
+%%Pages: 2

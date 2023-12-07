@@ -1,0 +1,827 @@
+%!PS-Adobe-3.0
+%%Creator: psdit
+%%For: lsr-irisf:lmo (Lance M. Optican - LMO)
+%%Title: stdin (ditroff)
+%%CreationDate: Wed Aug  2 16:07:02 1995
+%%DocumentNeededResources: (atend)
+%%DocumentSuppliedResources: DIThacks
+%%Pages: (atend)
+%%EndComments
+% Start of psdit.pro -- prolog for ditroff translator
+% Copyright (c) 1985,1987 Adobe Systems Incorporated. All Rights Reserved. 
+% GOVERNMENT END USERS: See Notice file in TranScript library directory
+% -- probably /usr/lib/ps/Notice
+% RCS: $Header: /disks/hobo/vp6/snichols/rel3.0/transcript/lib/RCS/psdit.pro,v 3.0 1991/06/17 17:08:31 snichols Exp $
+/$DITroff 140 dict def $DITroff begin
+/fontnum 1 def /fontsize 10 def /fontheight 10 def /fontslant 0 def
+/xi {72 mul 0 exch translate 72 resolution div dup neg scale 0 0 moveto
+  /fontnum 1 def /fontsize 10 def /fontheight 10 def /fontslant 0 def F
+  /pagesave save def}def
+/PB{save /psv exch def currentpoint translate
+  resolution 72 div dup neg scale 0 0 moveto}def
+/PE{psv restore}def
+/m1 matrix def /m2 matrix def /m3 matrix def /oldmat matrix def
+/tan{dup sin exch cos div}bind def
+/point{resolution 72 div mul}bind def
+/dround	{transform round exch round exch itransform}bind def
+/xT{/devname exch def}def
+/xr{/mh exch def /my exch def /resolution exch def}def
+/xp{}def
+/xs{docsave restore end}def
+/xt{}def
+/xf{/fontname exch def /slotno exch def fontnames slotno get fontname eq not
+ {fonts slotno fontname findfont put fontnames slotno fontname put}if}def
+/xH{/fontheight exch def F}bind def
+/xS{/fontslant exch def F}bind def
+/s{/fontsize exch def /fontheight fontsize def F}bind def
+/f{/fontnum exch def F}bind def
+/F{fontheight 0 le {/fontheight fontsize def}if
+   fonts fontnum get fontsize point 0 0 fontheight point neg 0 0 m1 astore
+   fontslant 0 ne{1 0 fontslant neg tan 1 0 0 m2 astore m3 concatmatrix}if
+   makefont setfont .04 fontsize point mul 0 dround pop setlinewidth}bind def
+/X{exch currentpoint exch pop moveto show}bind def
+/N{3 1 roll moveto show}bind def
+/Y{exch currentpoint pop exch moveto show}bind def
+/S /show load def
+/ditpush{}def/ditpop{}def
+/AX{3 -1 roll currentpoint exch pop moveto 0 exch ashow}bind def
+/AN{4 2 roll moveto 0 exch ashow}bind def
+/AY{3 -1 roll currentpoint pop exch moveto 0 exch ashow}bind def
+/AS{0 exch ashow}bind def
+/MX{currentpoint exch pop moveto}bind def
+/MY{currentpoint pop exch moveto}bind def
+/MXY /moveto load def
+/cb{pop}def	% action on unknown char -- nothing for now
+/n{}def/w{}def
+/p{pop showpage pagesave restore /pagesave save def}def
+/abspoint{currentpoint exch pop add exch currentpoint pop add exch}def
+/dstroke{currentpoint stroke moveto}bind def
+/Dl{2 copy gsave rlineto stroke grestore rmoveto}bind def
+/arcellipse{oldmat currentmatrix pop
+ currentpoint translate 1 diamv diamh div scale /rad diamh 2 div def
+ rad 0 rad -180 180 arc oldmat setmatrix}def
+/Dc{gsave dup /diamv exch def /diamh exch def arcellipse dstroke 
+    grestore diamh 0 rmoveto}def
+/De{gsave /diamv exch def /diamh exch def arcellipse dstroke
+    grestore diamh 0 rmoveto}def
+/Da{currentpoint /by exch def /bx exch def /fy exch def /fx exch def
+   /cy exch def /cx exch def /rad cx cx mul cy cy mul add sqrt def
+   /ang1 cy neg cx neg atan def /ang2 fy fx atan def cx bx add cy by add
+   2 copy rad ang1 ang2 arcn stroke exch fx add exch fy add moveto}def
+/Barray 200 array def % 200 values in a wiggle
+/D~{mark}def
+/D~~{counttomark Barray exch 0 exch getinterval astore /Bcontrol exch def pop
+ /Blen Bcontrol length def Blen 4 ge Blen 2 mod 0 eq and
+ {Bcontrol 0 get Bcontrol 1 get abspoint /Ycont exch def /Xcont exch def
+  Bcontrol 0 2 copy get 2 mul put Bcontrol 1 2 copy get 2 mul put
+  Bcontrol Blen 2 sub 2 copy get 2 mul put
+  Bcontrol Blen 1 sub 2 copy get 2 mul put
+  /Ybi /Xbi currentpoint 3 1 roll def def 0 2 Blen 4 sub
+  {/i exch def
+   Bcontrol i get 3 div Bcontrol i 1 add get 3 div
+   Bcontrol i get 3 mul Bcontrol i 2 add get add 6 div
+   Bcontrol i 1 add get 3 mul Bcontrol i 3 add get add 6 div
+   /Xbi Xcont Bcontrol i 2 add get 2 div add def
+   /Ybi Ycont Bcontrol i 3 add get 2 div add def
+   /Xcont Xcont Bcontrol i 2 add get add def
+   /Ycont Ycont Bcontrol i 3 add get add def
+   Xbi currentpoint pop sub Ybi currentpoint exch pop sub rcurveto
+  }for dstroke}if}def
+end
+/ditstart{$DITroff begin
+ /nfonts 60 def			% NFONTS makedev/ditroff dependent!
+ /fonts[nfonts{0}repeat]def
+ /fontnames[nfonts{()}repeat]def
+/docsave save def
+}def
+
+% character outcalls
+/oc {/pswid exch def /cc exch def /name exch def
+   /ditwid pswid fontsize mul resolution mul 72000 div def
+   /ditsiz fontsize resolution mul 72 div def
+   ocprocs name known{ocprocs name get exec}{name cb}
+   ifelse}def
+/fractm [.65 0 0 .6 0 0] def
+/fraction
+ {/fden exch def /fnum exch def gsave /cf currentfont def
+  cf fractm makefont setfont 0 .3 dm 2 copy neg rmoveto
+  fnum show rmoveto currentfont cf setfont(\244)show setfont fden show 
+  grestore ditwid 0 rmoveto} def
+/oce {grestore ditwid 0 rmoveto}def
+/dm {ditsiz mul}def
+/ocprocs 50 dict def ocprocs begin
+(14){(1)(4)fraction}def
+(12){(1)(2)fraction}def
+(34){(3)(4)fraction}def
+(13){(1)(3)fraction}def
+(23){(2)(3)fraction}def
+(18){(1)(8)fraction}def
+(38){(3)(8)fraction}def
+(58){(5)(8)fraction}def
+(78){(7)(8)fraction}def
+(sr){gsave .05 dm .16 dm rmoveto(\326)show oce}def
+(is){gsave 0 .15 dm rmoveto(\362)show oce}def
+(->){gsave 0 .02 dm rmoveto(\256)show oce}def
+(<-){gsave 0 .02 dm rmoveto(\254)show oce}def
+(==){gsave 0 .05 dm rmoveto(\272)show oce}def
+end
+%%BeginResource: font DIThacks
+% DIThacks fonts for some special chars
+50 dict dup begin
+/FontType 3 def
+/FontName /DIThacks def
+/FontMatrix [.001 0.0 0.0 .001 0.0 0.0] def
+/FontBBox [-220 -280 900 900] def% a lie but ...
+/Encoding 256 array def
+0 1 255{Encoding exch /.notdef put}for
+Encoding
+ dup 8#040/space put %space
+ dup 8#110/rc put %right ceil
+ dup 8#111/lt put %left  top curl
+ dup 8#112/bv put %bold vert
+ dup 8#113/lk put %left  mid curl
+ dup 8#114/lb put %left  bot curl
+ dup 8#115/rt put %right top curl
+ dup 8#116/rk put %right mid curl
+ dup 8#117/rb put %right bot curl
+ dup 8#120/rf put %right floor
+ dup 8#121/lf put %left  floor
+ dup 8#122/lc put %left  ceil
+ dup 8#140/sq put %square
+ dup 8#141/bx put %box
+ dup 8#142/ci put %circle
+ dup 8#143/br put %box rule
+ dup 8#144/rn put %root extender
+ dup 8#145/vr put %vertical rule
+ dup 8#146/ob put %outline bullet
+ dup 8#147/bu put %bullet
+ dup 8#150/ru put %rule
+ dup 8#151/ul put %underline
+ pop
+/DITfd 100 dict def
+/BuildChar{0 begin
+ /cc exch def /fd exch def
+ /charname fd /Encoding get cc get def
+ /charwid fd /Metrics get charname get def
+ /charproc fd /CharProcs get charname get def
+ charwid 0 fd /FontBBox get aload pop setcachedevice
+ 40 setlinewidth
+ newpath 0 0 moveto gsave charproc grestore
+ end}def
+/BuildChar load 0 DITfd put
+%/UniqueID 5 def
+/CharProcs 50 dict def
+CharProcs begin
+/space{}def
+/.notdef{}def
+/ru{500 0 rls}def
+/rn{0 750 moveto 500 0 rls}def
+/vr{20 800 moveto 0 -770 rls}def
+/bv{20 800 moveto 0 -1000 rls}def
+/br{20 770 moveto 0 -1040 rls}def
+/ul{0 -250 moveto 500 0 rls}def
+/ob{200 250 rmoveto currentpoint newpath 200 0 360 arc closepath stroke}def
+/bu{200 250 rmoveto currentpoint newpath 200 0 360 arc closepath fill}def
+/sq{80 0 rmoveto currentpoint dround newpath moveto
+    640 0 rlineto 0 640 rlineto -640 0 rlineto closepath stroke}def
+/bx{80 0 rmoveto currentpoint dround newpath moveto
+    640 0 rlineto 0 640 rlineto -640 0 rlineto closepath fill}def
+/ci{355 333 rmoveto currentpoint newpath 333 0 360 arc
+    50 setlinewidth stroke}def
+
+/lt{20 -200 moveto 0 550 rlineto currx 800 2cx s4 add exch s4 a4p stroke}def
+/lb{20 800 moveto 0 -550 rlineto currx -200 2cx s4 add exch s4 a4p stroke}def
+/rt{20 -200 moveto 0 550 rlineto currx 800 2cx s4 sub exch s4 a4p stroke}def
+/rb{20 800 moveto 0 -500 rlineto currx -200 2cx s4 sub exch s4 a4p stroke}def
+/lk{20 800 moveto 20 300 -280 300 s4 arcto pop pop 1000 sub
+    currentpoint stroke moveto
+    20 300 4 2 roll s4 a4p 20 -200 lineto stroke}def
+/rk{20 800 moveto 20 300 320 300 s4 arcto pop pop 1000 sub
+    currentpoint stroke moveto
+    20 300 4 2 roll s4 a4p 20 -200 lineto stroke}def
+/lf{20 800 moveto 0 -1000 rlineto s4 0 rls}def
+/rf{20 800 moveto 0 -1000 rlineto s4 neg 0 rls}def
+/lc{20 -200 moveto 0 1000 rlineto s4 0 rls}def
+/rc{20 -200 moveto 0 1000 rlineto s4 neg 0 rls}def
+end
+
+/Metrics 50 dict def Metrics begin
+/.notdef 0 def
+/space 500 def
+/ru 500 def
+/br 0 def
+/lt 250 def
+/lb 250 def
+/rt 250 def
+/rb 250 def
+/lk 250 def
+/rk 250 def
+/rc 250 def
+/lc 250 def
+/rf 250 def
+/lf 250 def
+/bv 250 def
+/ob 350 def
+/bu 350 def
+/ci 750 def
+/bx 750 def
+/sq 750 def
+/rn 500 def
+/ul 500 def
+/vr 0 def
+end
+
+DITfd begin
+/s2 500 def /s4 250 def /s3 333 def
+/a4p{arcto pop pop pop pop}def
+/2cx{2 copy exch}def
+/rls{rlineto stroke}def
+/currx{currentpoint pop}def
+/dround{transform round exch round exch itransform} def
+end
+end
+/DIThacks exch definefont pop
+%%EndResource 
+%%EndProlog
+%%BeginSetup
+ditstart
+(psc)xT
+576 1 1 xr
+%%IncludeResource: font Times-Roman
+1(Times-Roman)xf 1 f
+%%IncludeResource: font Times-Italic
+2(Times-Italic)xf 2 f
+%%IncludeResource: font Times-Bold
+3(Times-Bold)xf 3 f
+%%IncludeResource: font Times-BoldItalic
+4(Times-BoldItalic)xf 4 f
+%%IncludeResource: font Helvetica
+5(Helvetica)xf 5 f
+%%IncludeResource: font Helvetica-Bold
+6(Helvetica-Bold)xf 6 f
+%%IncludeResource: font Courier
+7(Courier)xf 7 f
+%%IncludeResource: font Courier-Bold
+8(Courier-Bold)xf 8 f
+%%IncludeResource: font Symbol
+9(Symbol)xf 9 f
+10(DIThacks)xf 10 f
+10 s
+1 f
+11.00 xi
+%%EndSetup
+
+%%Page: 1 1
+10 s 10 xH 0 xS 1 f
+3 f
+14 s
+1843 972(M)N
+1949(EX)X
+2132(License)X
+2521(Agreement)X
+1 f
+12 s
+776 1112(MEX)N
+1022(for)X
+1167(the)X
+1318(PC)X
+1468(is)X
+1565(distributed)X
+2010(under)X
+2262(a)X
+2338(license)X
+2640(agreement.)X
+3124(This)X
+3329(has)X
+3491(been)X
+3707(implemented)X
+4245(to)X
+576 1224(preserve)N
+944(the)X
+1104(LSR's)X
+1391(rights)X
+1652(to)X
+1769(negotiate)X
+2165(with)X
+2378(any)X
+2559(companies)X
+3013(that)X
+3200(may)X
+3407(want)X
+3635(to)X
+3751 0.3229(commercialize)AX
+576 1336(MEX.)N
+837(The)X
+1011(intent)X
+1255(is)X
+3 f
+1343(NOT)X
+1 f
+1575(to)X
+1674(restrict)X
+1966(it's)X
+2113(distribution)X
+2581(in)X
+2680(any)X
+2843(way)X
+3027(to)X
+3126(researchers.)X
+776 1476(The)N
+983(source)X
+1291(to)X
+1423(MEX)X
+1693(is)X
+1814(kept)X
+2037(on)X
+2190(the)X
+2365(machine)X
+2 f
+2749(lsr.nei.nih.gov)X
+1 f
+3359(under)X
+2 f
+3636(/usr/ftp/rex)X
+1 f
+4064(.)X
+4170(The)X
+576 1588(distribution)N
+1063(includes)X
+1427(the)X
+1588(MEX)X
+1844(source)X
+2138(and)X
+2320(the)X
+2480(manual.)X
+2854(The)X
+3046(MEX)X
+3301(source)X
+3594(is)X
+3700(encrypted.)X
+4170(The)X
+576 1700(manual)N
+884(is)X
+972(not)X
+1119(encrypted.)X
+776 1840(In)N
+883(order)X
+1113(to)X
+1215(get)X
+1360(the)X
+1505(MEX)X
+1746(source,)X
+2049(you)X
+2221(must)X
+2436(fax)X
+2587(or)X
+2695(mail)X
+2895(the)X
+3041(completed)X
+3471(license)X
+3767(form)X
+3982(below)X
+4245(to)X
+576 1952(the)N
+725(LSR.)X
+980(You)X
+1176(will)X
+1357(then)X
+1554(be)X
+1676(contacted)X
+2077(and)X
+2247(given)X
+2491(the)X
+2639(decryption)X
+3081(password.)X
+3521(You)X
+3716(can)X
+3880(pick)X
+4076(up)X
+4202(the)X
+576 2064(encrypted)N
+982(\256les)X
+1168(via)X
+1312(anonymous)X
+1781(ftp.)X
+1962(Please)X
+2234(\256ll)X
+2367(out)X
+2516(license)X
+2810(form)X
+3023(and)X
+3188(return)X
+3444(via)X
+3588(mail)X
+3787(or)X
+3894(FAX)X
+4112(\(301-)X
+576 2176(402-0511\).)N
+1048(The)X
+1222(voice)X
+1455(telephone)X
+1854(number)X
+2172(is)X
+2260(301-496-9375.)X
+2088 6160(August)N
+2389(2,)X
+2485(1995)X
+
+1 p
+%%Page: 1 2
+12 s 12 xH 0 xS 1 f
+3 f
+14 s
+1251 688(Statement)N
+1767(of)X
+1889(Terms)X
+2229(and)X
+2437(Conditions)X
+2988(for)X
+3160(Release)X
+3550(of)X
+1795 800(The)N
+2009(M)X
+2115(EX)X
+2298(Software)X
+2757(System)X
+1 f
+12 s
+576 1164(The)N
+818(Federal)X
+1199(Government)X
+1772(of)X
+1944(the)X
+2154(United)X
+2508(States)X
+2830(of)X
+3002(America)X
+3426(is)X
+3583(hereinafter)X
+4094("THE)X
+576 1276(GOVERNMENT".)N
+576 1416(The)N
+812(Laboratory)X
+1326(of)X
+1492(Sensorimotor)X
+2096(Research,)X
+2559(hereinafter)X
+3063("LSR",)X
+3428(an)X
+3606(agency)X
+3966(of)X
+4133(THE)X
+576 1528(GOVERNMENT,)N
+1295(is)X
+1383(the)X
+1525(originator)X
+1929(of)X
+2033(the)X
+2175(MEX)X
+2412(package.)X
+576 1668(The)N
+797(MEX)X
+1081(Package)X
+1473(is)X
+1609(a)X
+1724(collection)X
+2177(of)X
+2329(computer)X
+2765(programs,)X
+3224(data)X
+3457(\256les,)X
+3713(and)X
+3924(associated)X
+576 1780(documentation,)N
+1200(which)X
+1462(may)X
+1655(be)X
+1773(provided)X
+2142(in)X
+2244(either)X
+2491(or)X
+2597(both)X
+2794(electronic)X
+3201(and)X
+3366(printed)X
+3665(form,)X
+3902(hereinafter)X
+576 1892(referred)N
+905(to)X
+1004(as)X
+1108("MEX".)X
+576 2060(_______________________________________________________________________)N
+576 2172(\(enter)N
+825(name)X
+1058(of)X
+1162(corporation)X
+1630(or)X
+1734(private)X
+2026(individual)X
+2441(requesting)X
+2866(MEX\),)X
+576 2396(having)N
+862(an)X
+977(of\256ce)X
+1220(at:)X
+576 2620(_______________________________________________________________________)N
+576 2844(_______________________________________________________________________)N
+576 3068(_______________________________________________________________________)N
+576 3404(is)N
+664(hereinafter)X
+1106(referred)X
+1435(to)X
+1534(as)X
+1638("RECIPIENT".)X
+576 3600(1.)N
+699(MEX)X
+939(is)X
+1031(an)X
+1150(unpublished)X
+1648(work)X
+1873(that)X
+2046(is)X
+2138(not)X
+2289(generally)X
+2676(available)X
+3053(to)X
+3156(the)X
+3302(public,)X
+3595(except)X
+3875(through)X
+4202(the)X
+576 3712(terms)N
+842(of)X
+974(this)X
+1165(limited)X
+1491(distribution.)X
+2011(THE)X
+2250(GOVERNMENT)X
+2973(grants)X
+3260(recipient)X
+3649(a)X
+3743(personal,)X
+4144(non-)X
+576 3824(exclusive,)N
+1001(non-transferable)X
+1669(license)X
+1974(and)X
+2150(right)X
+2369(to)X
+2481(use)X
+2646(MEX.)X
+2944(No)X
+3098(right)X
+3318(is)X
+3420(granted)X
+3747(for)X
+3897(any)X
+4074(use)X
+4240(of)X
+576 3936(MEX)N
+813(by)X
+933(any)X
+1096(third)X
+1302(party.)X
+576 4076(2.)N
+706(RECIPIENT)X
+1231(will)X
+1415(be)X
+1540(responsible)X
+2012(for)X
+2158(assuring)X
+2513(that)X
+2693(MEX)X
+2941(will)X
+3126(not)X
+3284(be)X
+3410(released)X
+3761(or)X
+3876(sold)X
+4071(to)X
+4181(any)X
+576 4188(other)N
+798(party)X
+1020(without)X
+1338(the)X
+1480(prior)X
+1691(written)X
+1988(approval)X
+2349(of)X
+2453(LSR.)X
+576 4328(3.)N
+701(RECIPIENT)X
+1221(guarantees)X
+1663(that)X
+1838(MEX,)X
+2105(and)X
+2274(any)X
+2443(modi\256ed)X
+2815(versions)X
+3165(thereof,)X
+3492(will)X
+3672(not)X
+3825(be)X
+3946(published)X
+576 4440(for)N
+725(pro\256t)X
+970(or)X
+1087(in)X
+1199(any)X
+1375(manner)X
+1700(offered)X
+2014(for)X
+2162(sale)X
+2348(to)X
+2459(THE)X
+2682(GOVERNMENT.)X
+3413(If)X
+3513(MEX)X
+3762(is)X
+3862(modi\256ed)X
+4240(or)X
+576 4552(enhanced)N
+983(using)X
+1234(funds)X
+1490(from)X
+1721(THE)X
+1952(GOVERNMENT,)X
+2691(THE)X
+2922(GOVERNMENT)X
+3637(owns)X
+3883(the)X
+4045(results,)X
+576 4664(whether)N
+923(MEX)X
+1172(is)X
+1272(the)X
+1426(basis)X
+1654(of)X
+1770(or)X
+1886(incidental)X
+2303(to)X
+2414(a)X
+2493(contract.)X
+2864(MEX)X
+3113(may)X
+3315(be)X
+3442(used)X
+3654(in)X
+3765(contracts)X
+4149(with)X
+576 4776(THE)N
+787(GOVERNMENT)X
+1482(but)X
+1629(no)X
+1749(development)X
+2271(charge)X
+2552(may)X
+2742(be)X
+2857(made)X
+3090(as)X
+3194(part)X
+3368(of)X
+3472(its)X
+3587(use.)X
+576 4916(4.)N
+700(MEX)X
+941(is)X
+1033(provided)X
+1403("as)X
+1550(is",)X
+1705(without)X
+2027(warranty.)X
+2421(Neither)X
+2738(THE)X
+2953(GOVERNMENT)X
+3652(nor)X
+3808(LSR)X
+4012(is)X
+4105(liable)X
+576 5028(or)N
+687(responsible)X
+1156(for)X
+1299(maintenance,)X
+1841(updating,)X
+2232(or)X
+2342(correcting)X
+2763(any)X
+2932(errors)X
+3186(in)X
+3291(any)X
+3460(materials)X
+3844(provided.)X
+4240(In)X
+576 5140(no)N
+702(event)X
+942(shall)X
+1155(THE)X
+1373(GOVERNMENT)X
+2075(or)X
+2186(LSR)X
+2393(be)X
+2515(liable)X
+2761(for)X
+2904(any)X
+3074(loss)X
+3254(or)X
+3365(for)X
+3508(any)X
+3678(indirect,)X
+4028(special,)X
+576 5252(punitive,)N
+967(exemplary,)X
+1449(incidental,)X
+1905(or)X
+2036(consequential)X
+2617(damages)X
+3005(arising)X
+3317(from)X
+3554(use,)X
+3756(possession,)X
+4240(or)X
+576 5364(performance)N
+1087(of)X
+1191(MEX.)X
+576 5504(5.)N
+696(RECIPIENT)X
+1211(will)X
+1385(own)X
+1574(full)X
+1732(rights)X
+1975(to)X
+2074(any)X
+2237(data)X
+2422(\256les,)X
+2630(databases)X
+3023(or)X
+3127(images)X
+3424(created)X
+3727(using)X
+3959(MEX.)X
+2088 6160(August)N
+2389(2,)X
+2485(1995)X
+
+2 p
+%%Page: 2 3
+12 s 12 xH 0 xS 1 f
+2328 400(-2-)N
+576 688(By)N
+727(signing)X
+1049(here,)X
+1278(RECIPIENT)X
+1808(signi\256es)X
+2167(agreement)X
+2608(to)X
+2722(these)X
+2959(terms)X
+3212(and)X
+3390(conditions)X
+3830(of)X
+3949(the)X
+4107(MEX)X
+576 800(distribution)N
+1044(as)X
+1148(detailed)X
+1478(above.)X
+576 1080(____________________________________________________________)N
+1776 1192(RECIPIENT's)N
+2360(Signature)X
+576 1416(____________________________________________________________)N
+1776 1528(RECIPIENT's)N
+2360(Printed)X
+2662(Name)X
+576 1752(____________________________________________________________)N
+1776 1864(Title)N
+576 2088(____________________________________________________________)N
+1776 2200(Corporation)N
+576 2424(____________________________________________________________)N
+1776 2536(Mailing)N
+2105(Address)X
+576 2760(____________________________________________________________)N
+1776 2872(City,)N
+1990(State,)X
+2231(Zip)X
+2389(Code,)X
+2640(Country)X
+576 3096(____________________________________________________________)N
+1776 3208(Phone)N
+2040(#)X
+576 3432(____________________________________________________________)N
+1776 3544(FAX)N
+1991(#)X
+576 3768(____________________________________________________________)N
+1776 3880(Date)N
+576 4104(____________________________________________________________)N
+1776 4216(E-mail)N
+2088 6160(August)N
+2389(2,)X
+2485(1995)X
+
+3 p
+%%Trailer
+xt
+%%Pages: 3
+%%DocumentNeededResources: font Times-Roman Times-Italic Times-Bold 
+%%+ Times-BoldItalic Helvetica Helvetica-Bold Courier Courier-Bold Symbol 
+
+xs

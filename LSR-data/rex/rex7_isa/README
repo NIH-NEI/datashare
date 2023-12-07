@@ -1,0 +1,208 @@
+				REX 7.3 for QNX 4.25 Release Notes
+ 					   8/17/01
+
+New since release 7.2:
+
+	- 'configRex' command in /rex/sset.  This is a first pass at a program to
+automatically configure REX, editing the /rex/hdr/cnf.h file and then running
+the proper make commands.  Run by typing 'configRex', setting desired options,
+then clicking 'Configure'.  Developed by John McClurkin.
+	- support for sending ecodes to the Plexon MAP box.  See comments in 
+/rex/hdr/cnf.h and the 'PLEX_ECODES' define.  Thanks to Jochen Ditterich for
+sharing ideas about how to this from his implementation.
+	- improvements to the interface for manually toggling the digital input/output
+bits.
+
+**************************
+
+NOTE:  This is a pre-release version.  There are a few things we are cleaning up at
+present.  However, it works fine and we have been using it since Dec 2000.
+
+Important notes for those who like to try to get something working before reading 
+all the release notes:  
+
+	- REX is now made in the 'sset' directory, not the 'int' directory.
+	- Don't configure the Photon display to 32 bit color, 24 bit is correct.
+	- Photon is started by typing 'ph'.
+	- You have to make some changes to your Spot files (see below).
+	- We are running this version on 450MHz machines with 256MB.  It consumes
+	  30% of a 450MHz cpu.  I would think it would run with less than 256MB, but
+	  we haven't tried it.  The memory usage indicator on the RTP version shows
+	  it is using less than 128MB.
+
+1.) Photon Version History
+
+	REX 7.2 is the first release of the Photon version of REX.  This version was
+begun in late 1999 by Linda Hooks who completed a prototype that had window and
+running line displays but retained the old command line interface.  After Linda left
+in mid 2000 Dr. John McClurkin took over this project and added an online version of
+his 'DEX' raster display program.  He also did a tremendous amount of work to design
+and implement a new GUI-based interface to replace the command line interface.  
+This required replacing the 'comm' program completely.  He also has reworked the REX
+manual and added new chapters.
+
+	This version of REX has been running since Dec 2000 here at NIH.  We have
+also tested and verified it's real-time performance.
+
+	In order to run this version of REX one needs QNX 4.25 with the TCP/IP runtime, 
+TCP/IP development, Photon runtime, and Photon development options.  We are planning
+on releasing all new verions of REX on the new QNX operating system called 'RTP'.  This
+system is free for non-commercial use, and includes everything one needs to run REX in
+the basic distribution.
+
+2.) New Functionality in Initial Release
+
+	- Command line interface replaced with GUI and mouse.  The dumb terminal is
+no longer required.  Photon also has multiple virtual 'screens' that can be selected
+for display via clicking with the mouse or from keyboard with 'cntrl-alt-1',
+cntrl-alt-2', etc.  This allows one to distribute REX menus, displays, rasters
+across multiple virtual screens and easily switch between them.  In the future
+Photon will support dual video adapters, and REX windows can span two active
+monitors at once.  There is a new section in the REX manual titled "REX Graphical
+User Interface" that gives much detail and instructions for the new interface.
+
+	- 'disp' process has been replaced with an online version of John's 'DEX' data
+analysis program.  This permits much more flexibility in the online raster/histogram
+displays including conditional triggers and spike densities.  Multiple instances of the
+raster process can be active at once and displayed on screen.  This new dislpay is
+documented in the "REX Graphical User Interface" chapter.
+
+	- 'Real-time variables'.  One can now designate variables in the spot file that
+will be continuously updated on the screen every second.  This is useful for things
+such as trial counts, etc.
+
+	- Triggering and refresh-rate options for the window display.  This permits the
+window display to simulate a storage scope, with eye movements leaving 'trails' of
+variable persistence.
+
+	- Multiple menus can be open at once.  The command line interface of old REX 
+would permit only one menu to be open at a time.
+
+	- New state file debug display.
+	
+	- Manual now in 'pdf' format.  Please note some sections of the manual have yet 
+to be updated from the old manual.
+
+3.) Conversion from older versions of REX.
+
+	Some changes are required in Spot files for the new version of REX.  Please
+look at the documentation in the manual chapter "Spot Language Specification" for
+details. An example Spot file is provide in rex/sset named 'tstramp.d'.  
+Specifically:
+
+	- Submenus are no longer supported in the statelist menu.  Submenus must become
+top level menus declared in the 'state_vl' structure.
+
+	- User nouns are no longer supported.  These are replaced by user functions 
+declared in the 'ufuncs' structure.
+
+	- One can now specify real-time variables in the 'rtvars' structure.
+
+->	ALSO PLEASE NOTE:  One makes REX now in the SSET directory, not in the INT
+directory!!!!  
+
+4.) Unpacking REX
+
+	REX is stored as an encrypted 'zip' file.  To decrypt REX you must supply the
+correct password to the 'unzip' program.  The 'unzip' program is available from
+ftp.qnx.com under the directory /usr/free/qnx4/os/utils/archivers, or in the 'config.tar'
+file.
+
+5.) Motherboard
+
+	Choose a motherboard that has ISA slots that permit full-sized cards.  Some
+motherboards have the cpu or SIMMS positioned in such a way that some or all of the ISA
+slots are blocked from permitting a full-sized card.  Some of the cards used by REX are
+full-sized:  the NIATMIO16-X a/d, the 5 port digital i/o card, and the 8 or 16 channel
+d/a.  The Analogics a/d is not full-sized, nor is the 6 channel d/a.  So make sure you
+have enough full-sized slots for your configuration.
+
+	Soon the ISA bus will be obsolete.  We are in the process of supporting a/d,
+digital i/o, d/a cards on the PCI bus.  Also make sure you have enough total slots.  The
+ethernet, video, and disk controller may be on the PCI bus, or on the motherboard.  Most
+Pentium motherboards have a mix of ISA and PCI slots with some slots shared.
+
+6.) Disk controller
+
+	I believe it is best to use a SCSI controller instead of on-board EIDE.  This is
+because the SCSI controller uses bus-mastering to free up the cpu during disk transfers.  
+We are using the Adaptec controllers on the PCI bus.  QNX does not offer a bus-mastering
+EIDE driver.  Also note that QNX doesn't support all SCSI controllers.  Make sure the
+controller you have is supported by calling QNX.  For example, QNX currently does not
+support the Adaptec 2940UW DUAL controller that ships with some Dell machines, or the
+2940U2W controller.  It does support the Adaptec 2940UW (single) controller.
+
+7.) Ethernet
+
+	QNX does not have drivers for all makes of Ethernet controllers.  Make sure
+that you choose an Ethernet controller for which QNX has a driver.  You will need to
+call QNX and find out what drivers are currently available.  The Ethernet controller
+can be either built into the motherboard, on the PCI bus, or on the ISA bus.  QNX
+does support the 3C905 that is on many Dell motherboards.
+
+8.) Configuration and Interrupts
+
+	Many of the laboratory interfaces are not Plug-and-Play. Therefore their
+interrupts, DMA's and I/O addresses must be reserved so that the Plug-and-Play BIOS
+wont give them away to other cards when the computer is booted.  This is usually
+done in one of two ways- thru the BIOS setup screens or by the ICU (Intel
+Configuration Utility).  Failure to do this can result in REX failing to run, or
+intermittent problems.  Be especially aware that sound cards (often a part of the
+motherboard) can use a lot of resources, and interrupt 5.  The default
+configurations of REX have the a/d converter on interrupt 10, which is usually free.
+
+	Also please note that you must edit 'cnf.h' in the 'hdr' directory to
+reflect your hardware devices and desired options.  All of the user-editable items
+are close to the top of the file.  Then to make REX one goes to the directory
+'sset'.  The first time you make REX, or any time you change 'cnf.h', do a 'make
+complete'.  Thereafter a 'make sf=yourspotfile' is sufficient.
+
+	The file 'config.tar' contains printouts of the current versions of software used
+at NIH at the time of the distribution, as well as other files mentioned in this README.
+
+	The first time you run Photon it will configure the display adapter.  Set color 
+depth to 24 bit.  Do not set to 32 bit- this will affect real-time performance.
+
+6.) Recommendations for PC's to Run REX
+
+	We are currently running REX on Dell machines, though I think REX will run
+on most PC's.  Always use the latest version of QNX.  You can look at the file
+'versions_list' in the config.tar file to see the current versions in use at the
+time of the distribution.  We are running on 450MHz machines with 256MB of memory.  
+REX requires 30% of a 450MHz cpu.  It may run in 128MB of memory, but we haven't
+tried this yet.
+
+7.) PCI Support
+
+	We are currently running some digital I/O cards on the PCI bus, as well as some
+counter-timer cards for catching units from the Spectrum box.  If you are running out of
+ISA slots and wish to run these cards on PCI, please contact Art Hays at NIH.  We are
+working on a driver for a PCI a/d converter for the next release.
+
+8.) QNX 4.25 Kernel Rebuild
+
+	You must rebuild your kernel for REX.  See the file "boot/README_REX" in
+config.tar.
+
+9.) Make command differences
+
+	You must use an older version of the make command called 'qmake' to build REX.
+Since this is no longer shipped with QNX we have placed it in the config.tar file.  To
+install this version, rename the current '/bin/make' that is shipped with QNX 4.25 as
+"/bin/gmake".  Then take the qmake in the config.tar file and install it in /bin as
+"/bin/qmake".  Then make a link in /bin for 'make' to point to 'qmake':
+
+	ln -s /bin/qmake /bin/make
+
+	You will also need to place the 'default.mk' in the config.tar file in
+/usr/include/make.
+
+10.) Updated SCSI driver
+
+	Please replace your /bin/Fsys.aha7scsi with the one in the config.tar file.  This
+one fixes some latency bugs.
+
+11.) Additional files needed for Photon
+
+	The Rex distribution will unpack and replace some palette definition files 
+that are needed for Photon.  They are also included in the 'config.tar' file.

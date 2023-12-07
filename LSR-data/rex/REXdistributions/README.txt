@@ -1,0 +1,1 @@
+The latest release as of May 2015 is REX 8.0 for QNX 650.  There is a non-smp (Symmetric Multiprocessing) version and an smp version.  You must match the REX version to the QNX kernel- whether you are running the SMP kernel or not.

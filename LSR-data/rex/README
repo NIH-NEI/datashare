@@ -1,0 +1,13 @@
+	REX is a real-time data acquisition and laboratory control system written at NIH.  
+REX runs under the QNX and RTP real-time operating system on the PC architecture.  REX is
+distributed free via a simple license agreement (the purpose of which is to preserve the
+rights of the NIH to REX).  This agreement is found in an appendix of the manual.
+
+	Directories:
+
+	rex6: Last non-Photon version of REX
+	rex7_isa: Photon window version of REX for QNX 4.25.
+	rex7_pci: Photon window version of REX for QNX RTP platform and PCI bus
+
+Art Hays (avhays@nih.gov)
+Dr. John McClurkin (jwm@lsr.nei.nih.gov)

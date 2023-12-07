@@ -1,0 +1,4806 @@
+%!PS-Adobe-1.0
+%%Creator: lsr-vax:art (Art Hays - PSTAFF)
+%%Title: stdin (ditroff)
+%%CreationDate: Tue Jan  2 04:28:43 1996
+%%EndComments
+% Start of psdit.pro -- prolog for ditroff translator
+% Copyright (c) 1985,1987 Adobe Systems Incorporated. All Rights Reserved. 
+% GOVERNMENT END USERS: See Notice file in TranScript library directory
+% -- probably /usr/lib/ps/Notice
+% RCSID: %Header: psdit.pro,v 2.2 87/11/17 16:40:42 byron Rel $
+/$DITroff 180 dict def $DITroff begin
+ /DocumentInitState [ matrix currentmatrix currentlinewidth currentlinecap
+ currentlinejoin currentdash currentgray currentmiterlimit ] cvx def
+ 
+ %% Psfig additions
+ /startFig {
+ 	/SavedState save def
+ 	userdict maxlength dict begin
+ 	currentpoint transform
+ 
+ 	DocumentInitState setmiterlimit setgray setdash setlinejoin setlinecap
+ 		setlinewidth setmatrix
+ 
+ 	itransform moveto
+ 
+ 	/ury exch def
+ 	/urx exch def
+ 	/lly exch def
+ 	/llx exch def
+ 	/y exch 72 mul resolution div def
+ 	/x exch 72 mul resolution div def
+ 	
+ 	currentpoint /cy exch def /cx exch def
+ 
+ 	/sx x urx llx sub div def 	% scaling for x
+ 	/sy y ury lly sub div def	% scaling for y
+ 
+ 	sx sy scale			% scale by (sx,sy)
+ 
+ 	cx sx div llx sub
+ 	cy sy div ury sub translate
+ 	
+ 	/DefFigCTM matrix currentmatrix def
+ 
+ 	/initmatrix {
+ 		DefFigCTM setmatrix
+ 	} def
+ 	/defaultmatrix {
+ 		DefFigCTM exch copy
+ 	} def
+ 
+ 	/initgraphics {
+ 		DocumentInitState setmiterlimit setgray setdash 
+ 			setlinejoin setlinecap setlinewidth setmatrix
+ 		DefFigCTM setmatrix
+ 	} def
+ 
+ 	/showpage {
+ 		initgraphics
+ 	} def
+ 
+ } def
+ % Args are llx lly urx ury (in figure coordinates)
+ /clipFig {
+ 	currentpoint 6 2 roll
+ 	newpath 4 copy
+ 	4 2 roll moveto
+ 	6 -1 roll exch lineto
+ 	exch lineto
+ 	exch lineto
+ 	closepath clip
+ 	newpath
+ 	moveto
+ } def
+ % doclip, if called, will always be just after a `startfig'
+ /doclip { llx lly urx ury clipFig } def
+ /endFig {
+ 	end SavedState restore
+ } def
+ /globalstart {
+ 	% Push details about the enviornment on the stack.
+ 	fontnum fontsize fontslant fontheight 
+ 	% firstpage 
+ 	mh my resolution slotno currentpoint 
+ 	pagesave restore gsave 
+ } def
+ /globalend {
+ 	grestore moveto
+ 	/slotno exch def /resolution exch def /my exch def
+ 	/mh exch def 
+ 	% /firstpage exch def
+ 	/fontheight exch def
+ 	/fontslant exch def /fontsize exch def /fontnum exch def
+ 	F
+ 	/pagesave save def
+ } def
+ 
+ %% end XMOD additions
+ 
+  /fontnum 1 def /fontsize 10 def /fontheight 10 def /fontslant 0 def
+  /xi {0 72 11 mul translate 72 resolution div dup neg scale 0 0 moveto
+    /fontnum 1 def /fontsize 10 def /fontheight 10 def /fontslant 0 def F
+  /pagesave save def}def
+/PB{save /psv exch def currentpoint translate
+  resolution 72 div dup neg scale 0 0 moveto}def
+/PE{psv restore}def
+/m1 matrix def /m2 matrix def /m3 matrix def /oldmat matrix def
+/tan{dup sin exch cos div}bind def
+/point{resolution 72 div mul}bind def
+/dround	{transform round exch round exch itransform}bind def
+/xT{/devname exch def}def
+/xr{/mh exch def /my exch def /resolution exch def}def
+/xp{}def
+/xs{docsave restore end}def
+/xt{}def
+/xf{/fontname exch def /slotno exch def fontnames slotno get fontname eq not
+ {fonts slotno fontname findfont put fontnames slotno fontname put}if}def
+/xH{/fontheight exch def F}bind def
+/xS{/fontslant exch def F}bind def
+/s{/fontsize exch def /fontheight fontsize def F}bind def
+/f{/fontnum exch def F}bind def
+/F{fontheight 0 le {/fontheight fontsize def}if
+   fonts fontnum get fontsize point 0 0 fontheight point neg 0 0 m1 astore
+   fontslant 0 ne{1 0 fontslant tan 1 0 0 m2 astore m3 concatmatrix}if
+   makefont setfont .04 fontsize point mul 0 dround pop setlinewidth}bind def
+/X{exch currentpoint exch pop moveto show}bind def
+/N{3 1 roll moveto show}bind def
+/Y{exch currentpoint pop exch moveto show}bind def
+/S /show load def
+/ditpush{}def/ditpop{}def
+/AX{3 -1 roll currentpoint exch pop moveto 0 exch ashow}bind def
+/AN{4 2 roll moveto 0 exch ashow}bind def
+/AY{3 -1 roll currentpoint pop exch moveto 0 exch ashow}bind def
+/AS{0 exch ashow}bind def
+/MX{currentpoint exch pop moveto}bind def
+/MY{currentpoint pop exch moveto}bind def
+/MXY /moveto load def
+/cb{pop}def	% action on unknown char -- nothing for now
+/n{}def/w{}def
+/p{pop showpage pagesave restore /pagesave save def}def
+/abspoint{currentpoint exch pop add exch currentpoint pop add exch}def
+/dstroke{currentpoint stroke moveto}bind def
+/Dl{2 copy gsave rlineto stroke grestore rmoveto}bind def
+/arcellipse{oldmat currentmatrix pop
+ currentpoint translate 1 diamv diamh div scale /rad diamh 2 div def
+ rad 0 rad -180 180 arc oldmat setmatrix}def
+/Dc{gsave dup /diamv exch def /diamh exch def arcellipse dstroke 
+    grestore diamh 0 rmoveto}def
+/De{gsave /diamv exch def /diamh exch def arcellipse dstroke
+    grestore diamh 0 rmoveto}def
+/Da{currentpoint /by exch def /bx exch def /fy exch def /fx exch def
+   /cy exch def /cx exch def /rad cx cx mul cy cy mul add sqrt def
+   /ang1 cy neg cx neg atan def /ang2 fy fx atan def cx bx add cy by add
+   2 copy rad ang1 ang2 arcn stroke exch fx add exch fy add moveto}def
+/Barray 200 array def % 200 values in a wiggle
+/D~{mark}def
+/D~~{counttomark Barray exch 0 exch getinterval astore /Bcontrol exch def pop
+ /Blen Bcontrol length def Blen 4 ge Blen 2 mod 0 eq and
+ {Bcontrol 0 get Bcontrol 1 get abspoint /Ycont exch def /Xcont exch def
+  Bcontrol 0 2 copy get 2 mul put Bcontrol 1 2 copy get 2 mul put
+  Bcontrol Blen 2 sub 2 copy get 2 mul put
+  Bcontrol Blen 1 sub 2 copy get 2 mul put
+  /Ybi /Xbi currentpoint 3 1 roll def def 0 2 Blen 4 sub
+  {/i exch def
+   Bcontrol i get 3 div Bcontrol i 1 add get 3 div
+   Bcontrol i get 3 mul Bcontrol i 2 add get add 6 div
+   Bcontrol i 1 add get 3 mul Bcontrol i 3 add get add 6 div
+   /Xbi Xcont Bcontrol i 2 add get 2 div add def
+   /Ybi Ycont Bcontrol i 3 add get 2 div add def
+   /Xcont Xcont Bcontrol i 2 add get add def
+   /Ycont Ycont Bcontrol i 3 add get add def
+   Xbi currentpoint pop sub Ybi currentpoint exch pop sub rcurveto
+  }for dstroke}if}def
+end
+/ditstart{$DITroff begin
+ /nfonts 60 def			% NFONTS makedev/ditroff dependent!
+ /fonts[nfonts{0}repeat]def
+ /fontnames[nfonts{()}repeat]def
+/docsave save def
+}def
+
+% character outcalls
+/oc {/pswid exch def /cc exch def /name exch def
+   /ditwid pswid fontsize mul resolution mul 72000 div def
+   /ditsiz fontsize resolution mul 72 div def
+   ocprocs name known{ocprocs name get exec}{name cb}
+   ifelse}def
+/fractm [.65 0 0 .6 0 0] def
+/fraction
+ {/fden exch def /fnum exch def gsave /cf currentfont def
+  cf fractm makefont setfont 0 .3 dm 2 copy neg rmoveto
+  fnum show rmoveto currentfont cf setfont(\244)show setfont fden show 
+  grestore ditwid 0 rmoveto} def
+/oce {grestore ditwid 0 rmoveto}def
+/dm {ditsiz mul}def
+/ocprocs 50 dict def ocprocs begin
+(14){(1)(4)fraction}def
+(12){(1)(2)fraction}def
+(34){(3)(4)fraction}def
+(13){(1)(3)fraction}def
+(23){(2)(3)fraction}def
+(18){(1)(8)fraction}def
+(38){(3)(8)fraction}def
+(58){(5)(8)fraction}def
+(78){(7)(8)fraction}def
+(sr){gsave .05 dm .16 dm rmoveto(\326)show oce}def
+(is){gsave 0 .15 dm rmoveto(\362)show oce}def
+(->){gsave 0 .02 dm rmoveto(\256)show oce}def
+(<-){gsave 0 .02 dm rmoveto(\254)show oce}def
+(==){gsave 0 .05 dm rmoveto(\272)show oce}def
+end
+% DIThacks fonts for some special chars
+50 dict dup begin
+/FontType 3 def
+/FontName /DIThacks def
+/FontMatrix [.001 0.0 0.0 .001 0.0 0.0] def
+/FontBBox [-220 -280 900 900] def% a lie but ...
+/Encoding 256 array def
+0 1 255{Encoding exch /.notdef put}for
+Encoding
+ dup 8#040/space put %space
+ dup 8#110/rc put %right ceil
+ dup 8#111/lt put %left  top curl
+ dup 8#112/bv put %bold vert
+ dup 8#113/lk put %left  mid curl
+ dup 8#114/lb put %left  bot curl
+ dup 8#115/rt put %right top curl
+ dup 8#116/rk put %right mid curl
+ dup 8#117/rb put %right bot curl
+ dup 8#120/rf put %right floor
+ dup 8#121/lf put %left  floor
+ dup 8#122/lc put %left  ceil
+ dup 8#140/sq put %square
+ dup 8#141/bx put %box
+ dup 8#142/ci put %circle
+ dup 8#143/br put %box rule
+ dup 8#144/rn put %root extender
+ dup 8#145/vr put %vertical rule
+ dup 8#146/ob put %outline bullet
+ dup 8#147/bu put %bullet
+ dup 8#150/ru put %rule
+ dup 8#151/ul put %underline
+ pop
+/DITfd 100 dict def
+/BuildChar{0 begin
+ /cc exch def /fd exch def
+ /charname fd /Encoding get cc get def
+ /charwid fd /Metrics get charname get def
+ /charproc fd /CharProcs get charname get def
+ charwid 0 fd /FontBBox get aload pop setcachedevice
+ 40 setlinewidth
+ newpath 0 0 moveto gsave charproc grestore
+ end}def
+/BuildChar load 0 DITfd put
+%/UniqueID 5 def
+/CharProcs 50 dict def
+CharProcs begin
+/space{}def
+/.notdef{}def
+/ru{500 0 rls}def
+/rn{0 750 moveto 500 0 rls}def
+/vr{20 800 moveto 0 -770 rls}def
+/bv{20 800 moveto 0 -1000 rls}def
+/br{20 770 moveto 0 -1040 rls}def
+/ul{0 -250 moveto 500 0 rls}def
+/ob{200 250 rmoveto currentpoint newpath 200 0 360 arc closepath stroke}def
+/bu{200 250 rmoveto currentpoint newpath 200 0 360 arc closepath fill}def
+/sq{80 0 rmoveto currentpoint dround newpath moveto
+    640 0 rlineto 0 640 rlineto -640 0 rlineto closepath stroke}def
+/bx{80 0 rmoveto currentpoint dround newpath moveto
+    640 0 rlineto 0 640 rlineto -640 0 rlineto closepath fill}def
+/ci{355 333 rmoveto currentpoint newpath 333 0 360 arc
+    50 setlinewidth stroke}def
+
+/lt{20 -200 moveto 0 550 rlineto currx 800 2cx s4 add exch s4 a4p stroke}def
+/lb{20 800 moveto 0 -550 rlineto currx -200 2cx s4 add exch s4 a4p stroke}def
+/rt{20 -200 moveto 0 550 rlineto currx 800 2cx s4 sub exch s4 a4p stroke}def
+/rb{20 800 moveto 0 -500 rlineto currx -200 2cx s4 sub exch s4 a4p stroke}def
+/lk{20 800 moveto 20 300 -280 300 s4 arcto pop pop 1000 sub
+    currentpoint stroke moveto
+    20 300 4 2 roll s4 a4p 20 -200 lineto stroke}def
+/rk{20 800 moveto 20 300 320 300 s4 arcto pop pop 1000 sub
+    currentpoint stroke moveto
+    20 300 4 2 roll s4 a4p 20 -200 lineto stroke}def
+/lf{20 800 moveto 0 -1000 rlineto s4 0 rls}def
+/rf{20 800 moveto 0 -1000 rlineto s4 neg 0 rls}def
+/lc{20 -200 moveto 0 1000 rlineto s4 0 rls}def
+/rc{20 -200 moveto 0 1000 rlineto s4 neg 0 rls}def
+end
+
+/Metrics 50 dict def Metrics begin
+/.notdef 0 def
+/space 500 def
+/ru 500 def
+/br 0 def
+/lt 250 def
+/lb 250 def
+/rt 250 def
+/rb 250 def
+/lk 250 def
+/rk 250 def
+/rc 250 def
+/lc 250 def
+/rf 250 def
+/lf 250 def
+/bv 250 def
+/ob 350 def
+/bu 350 def
+/ci 750 def
+/bx 750 def
+/sq 750 def
+/rn 500 def
+/ul 500 def
+/vr 0 def
+end
+
+DITfd begin
+/s2 500 def /s4 250 def /s3 333 def
+/a4p{arcto pop pop pop pop}def
+/2cx{2 copy exch}def
+  /rls{rlineto stroke}def
+  /currx{currentpoint pop}def
+  /dround{transform round exch round exch itransform} def
+ 
+  end
+  end
+  /DIThacks exch definefont pop
+
+
+ditstart
+(psc)xT
+576 1 1 xr
+1(NewCenturySchlbk-Roman)xf 1 f
+2(NewCenturySchlbk-Italic)xf 2 f
+3(NewCenturySchlbk-Bold)xf 3 f
+4(NewCenturySchlbk-BoldItalic)xf 4 f
+5(Helvetica)xf 5 f
+6(Helvetica-Bold)xf 6 f
+7(Courier)xf 7 f
+8(Courier-Bold)xf 8 f
+9(Symbol)xf 9 f
+10(DIThacks)xf 10 f
+10 s
+1 f
+xi
+%%EndProlog
+
+%%Page: 1 1
+10 s 10 xH 0 xS 1 f
+8 s
+3 f
+12 s
+1487 672(SPOT-)N
+1832(A)X
+1932(State)X
+2219(Process)X
+2632(Translator)X
+3194(for)X
+2 f
+3367(R)X
+3369(RE)X
+3442(EX)X
+3513(X)X
+10 s
+2178 864(Barry)N
+2416(J.)X
+2509(Richmond)X
+2251 960(Arthur)N
+2527(V.)X
+2627(Hays)X
+2206 1056(Lance)N
+2448(M.)X
+2568(Optican)X
+1 f
+1422 1200(National)N
+1767(Institute)X
+2114(of)X
+2203(Mental)X
+2490(Health,)X
+2790(National)X
+3135(Eye)X
+3298(Institute,)X
+1742 1296(9000)N
+1940(Rockville)X
+2302(Pike,)X
+2512(Bethesda,)X
+2901(MD.,)X
+3105(20892)X
+2190 1488(Revised)N
+2501(21)X
+2611(Mar)X
+2789(94)X
+3 f
+806 1680(1.)N
+918(Introduction)X
+1 f
+1006 1804(The)N
+1172(REX)X
+1368(real-time)X
+1731(laboratory)X
+2138(control)X
+2419(and)X
+2582(data)X
+2771(acquisition)X
+3200(system)X
+3483(has)X
+3637(been)X
+3834(designed)X
+4185(so)X
+806 1900(control)N
+1087(paradigms)X
+1503(for)X
+1630(speci\256c)X
+1923(experiments)X
+2404(can)X
+2556(be)X
+2663(\257exibly)X
+2955(implemented.)X
+3506(During)X
+3793(implementa-)X
+806 1996(tion)N
+984(the)X
+1137(user's)X
+1385(attention)X
+1758(is)X
+1853(largely)X
+2142(directed)X
+2475(to)X
+2579(features)X
+2917(that)X
+3106(are)X
+3260(unique)X
+3550(for)X
+3687(the)X
+3841(experiment)X
+806 2092(being)N
+1038(designed.)X
+1439(This)X
+1634(end)X
+1800(is)X
+1893(realized)X
+2218(through)X
+2546(implementation)X
+3163(of)X
+3260(a)X
+3334(translator)X
+3737(for)X
+3870(a)X
+3944(state-set)X
+806 2188(based)N
+1040(control)X
+1320(speci\256cation)X
+1801(language,)X
+2 f
+2183(Spot)X
+1 f
+2373(\()X
+3 f
+2400(S)X
+1 f
+2453(tate)X
+3 f
+2623(P)X
+1 f
+2684(r)X
+3 f
+2720(O)X
+1 f
+2787(cessor)X
+3 f
+3037(T)X
+1 f
+3095(ranslator\).)X
+3532(The)X
+3698(Spot)X
+3889(translator)X
+806 2284(produces)N
+1160(tables)X
+1405(that)X
+1584(are)X
+1728(compiled)X
+2081(by)X
+2192(the)X
+2336(C)X
+2418(compiler.)X
+2805(These)X
+3048(tables)X
+3292(contain)X
+3589(speci\256cations)X
+4107(that)X
+806 2380(de\256ne)N
+3 f
+1057(states)X
+1 f
+1300(;)X
+1349(associated)X
+1756(with)X
+1950(each)X
+2146(state)X
+2356(are)X
+2503(conditions,)X
+3 f
+2930(escapes)X
+1 f
+3248(,)X
+3297(that)X
+3480(govern)X
+3759(transitions)X
+4191(to)X
+806 2476(other)N
+1028(states.)X
+1318(When)X
+1559(a)X
+1628(new)X
+1804(state)X
+2012(is)X
+2099(entered)X
+2406(a)X
+2475(user)X
+2662(written)X
+2961(subroutine)X
+3386(\(termed)X
+3702(an)X
+3 f
+3820(action)X
+1 f
+4081(\))X
+4133(can)X
+806 2572(be)N
+912(called)X
+1150(if)X
+1224(its)X
+1339(name)X
+1566(is)X
+1651(included)X
+1990(in)X
+2087(the)X
+2230(speci\256cation)X
+2711(of)X
+2801(the)X
+2944(new)X
+3118(state.)X
+3368(Virtually)X
+3727(no)X
+3839(restrictions)X
+806 2668(are)N
+959(placed)X
+1229(upon)X
+1446(the)X
+1599(action.)X
+1901(It)X
+1997(may)X
+2188(touch)X
+2426(hardware,)X
+2838(do)X
+2957(calculations)X
+3431(and)X
+3603(set)X
+3744(\257ags)X
+3950(for)X
+4086(later)X
+806 2764(use,)N
+988(process)X
+1294(lists)X
+1483(of)X
+1584(stimuli,)X
+1903(etc.)X
+2088(The)X
+2264(Spot)X
+2465(translator)X
+2872(makes)X
+3146(the)X
+3300(chain)X
+3537(of)X
+3638(states)X
+3893(extremely)X
+806 2860(easy)N
+1001(to)X
+1103(specify)X
+1388(and)X
+1558(edit.)X
+1775(Multiple,)X
+2144(independent)X
+2635(state)X
+2848(chains)X
+3118(are)X
+3268(permitted)X
+3664(and)X
+3833(executed)X
+4188(in)X
+806 2956(parallel.)N
+3 f
+806 3148(2.)N
+918(Process)X
+1262(Control)X
+1 f
+1006 3272(REX)N
+1220(process)X
+1534(control)X
+1833(is)X
+1938(implemented)X
+2465(using)X
+2711(a)X
+2798(logical)X
+3079(structure)X
+3467(which)X
+3731(depends)X
+4078(upon)X
+806 3368(states,)N
+1084(actions,)X
+1404(and)X
+1579(escapes.)X
+1939(This)X
+2139(system)X
+2434(is)X
+2532(table)X
+2752(driven,)X
+3049(executed)X
+3410(by)X
+3533(an)X
+3662(interpreter)X
+4107(that)X
+806 3464(runs)N
+1020(every)X
+1265(millisecond.)X
+1771(The)X
+1956(tables)X
+2220(are)X
+2383(dif\256cult)X
+2714(to)X
+2829(construct)X
+3218(by)X
+3349(hand,)X
+3603(so)X
+3724(a)X
+3812(translatable)X
+806 3560(language,)N
+3 f
+1191(Spot)X
+1 f
+1380(,)X
+1428(has)X
+1584(been)X
+1783(implemented)X
+2293(to)X
+2390(make)X
+2619(the)X
+2765(creation)X
+3092(of)X
+3185(the)X
+3331(tables)X
+3578(transparent)X
+4046(to)X
+4142(the)X
+806 3656(user.)N
+1006 3780(Control)N
+1312(routines)X
+1646(are)X
+1793(always)X
+2075(in)X
+2176(a)X
+2247(current)X
+3 f
+2551(state)X
+1 f
+2754(.)X
+2825(When)X
+3068(an)X
+3188(appropriate)X
+3649(condition,)X
+4040(recog-)X
+806 3876(nized)N
+1035(in)X
+1140(either)X
+1392(hardware)X
+1780(or)X
+1887(software,)X
+2257(occurs,)X
+2544(a)X
+2618(transition)X
+3015(or)X
+3 f
+3121(escape)X
+1 f
+3429(to)X
+3530(another)X
+3849(state)X
+4062(takes)X
+806 3972(place.)N
+1069(When)X
+1313(a)X
+1385(new)X
+1564(state)X
+1775(is)X
+1866(entered)X
+2177(after)X
+2384(an)X
+2506(escape)X
+2778(has)X
+2937(occurred)X
+3285(two)X
+3447(useful)X
+3703(things)X
+3966(happen.)X
+806 4068(First,)N
+1045(a)X
+1124(user)X
+1320(written)X
+1628(subroutine)X
+2062(or)X
+2172(function,)X
+2534(called)X
+2784(an)X
+3 f
+2911(action)X
+1 f
+3172(,)X
+3228(may)X
+3420(be)X
+3538(called.)X
+3832(Actions)X
+4142(are)X
+806 4164(usually)N
+1105(written)X
+1406(in)X
+1507(the)X
+1655(C)X
+1741(language,)X
+2128(and)X
+2295(must)X
+2511(be)X
+2623(compatible)X
+3053(with)X
+3248(C)X
+3334(calling)X
+3609(conventions.)X
+4120(The)X
+806 4260(action)N
+1055(may)X
+1237(be)X
+1344(passed)X
+1617(up)X
+1735(to)X
+1829(three)X
+2048(arguments.)X
+2515(These)X
+2757(arguments)X
+3180(are)X
+2 f
+3323(long)X
+3505(integers)X
+1 f
+3796(.)X
+3863(Second,)X
+4169(an)X
+3 f
+806 4356(event)N
+1071(code)X
+1 f
+1298(composed)X
+1689(of)X
+1791(an)X
+1919(integer)X
+2218(number)X
+2543(and)X
+2718(a)X
+2798(long)X
+2991(integer)X
+3291 0.2022(time-of-occurrence)AX
+4013(can)X
+4178(be)X
+806 4452(placed)N
+1078(into)X
+1258(the)X
+3 f
+1413(event)X
+1678(buffer)X
+1 f
+1935(.)X
+2014(The)X
+2191(user)X
+2388(selects)X
+2669(the)X
+2824(code.)X
+3065(Standard)X
+3446(event)X
+3684(codes)X
+3917(generally)X
+806 4548(come)N
+1030(from)X
+1241(some)X
+3 f
+1466(#include)X
+1 f
+1860(\256le,)X
+2033(while)X
+2271(speci\256c)X
+2577(codes)X
+2814(for)X
+2955(the)X
+3113(particular)X
+3523(experiment)X
+3982(may)X
+4178(be)X
+806 4644(placed)N
+1071(directly)X
+1381(in)X
+1483(the)X
+1631(paradigm)X
+2014(speci\256cation.)X
+2544(If)X
+2630(the)X
+2777(user)X
+2966(wishes,)X
+3265(a)X
+3336(code)X
+3525(may)X
+3710(be)X
+3821(returned)X
+4175(by)X
+806 4740(the)N
+953(action)X
+1205(which)X
+1453(will)X
+1618(placed)X
+1883(in)X
+1985(the)X
+2133(event)X
+2364(buffer)X
+2615(instead.)X
+2959(For)X
+3116(example,)X
+3475(if)X
+3555(the)X
+3703(action)X
+3956(was)X
+4127(set-)X
+806 4836(ting)N
+980(some)X
+1193(variables)X
+1556(from)X
+1755(a)X
+1824(table,)X
+2055(it)X
+2136(might)X
+2380(return)X
+2646(a)X
+2715(code)X
+2902(that)X
+3082(indicates)X
+3440(which)X
+3686(table)X
+3895(entry)X
+4119(was)X
+806 4932(selected.)N
+1006 5056(A)N
+1087(state)X
+1293(also)X
+1462(contains)X
+1796(the)X
+1939(variables)X
+3 f
+2301(time)X
+1 f
+2512(\(a)X
+2607(long)X
+2788(integer\),)X
+3125(and)X
+3 f
+3288(random)X
+1 f
+3637(\(a)X
+3732(short)X
+3949(integer\).)X
+806 5152(When)N
+1053(a)X
+1128(state)X
+1342(is)X
+1435(entered,)X
+1770(a)X
+1845(countdown)X
+2278(timer)X
+2512(is)X
+2605(initialized)X
+3009(to)X
+3111(the)X
+3 f
+3262(time)X
+1 f
+3479(variable)X
+3810(\(if)X
+3919(it)X
+4005(is)X
+4097(non-)X
+806 5248(negative\))N
+1172(plus)X
+1353(a)X
+1421(portion)X
+1712(of)X
+1803(the)X
+3 f
+1947(random)X
+1 f
+2296(variable.)X
+2666(The)X
+3 f
+2833(random)X
+1 f
+3183(variable)X
+3509(is)X
+3596(divided)X
+3892(into)X
+4062(quar-)X
+806 5344(ters,)N
+997(with)X
+1189(0,)X
+1280(1/4,)X
+1437(1/2,)X
+1594(3/4,)X
+1751(or)X
+1852(the)X
+1997(whole)X
+2238(added)X
+2485(added)X
+2732(to)X
+2828(the)X
+2973(timer.)X
+3244(Note)X
+3444(if)X
+3520(the)X
+3 f
+3664(time)X
+1 f
+3875(variable)X
+4200(is)X
+806 5440(negative,)N
+1165(the)X
+1307(countdown)X
+1731(timer)X
+1956(is)X
+2 f
+2040(not)X
+1 f
+2179(reinitialized)X
+2650(when)X
+2872(the)X
+3014(state)X
+3219(is)X
+3303(entered.)X
+
+2 p
+%%Page: 2 2
+10 s 10 xH 0 xS 1 f
+9 s
+2292 384(Chapter)N
+2585(2:)X
+2685(SPOT-)X
+2926(A)X
+2998(State)X
+3195(Process)X
+3465(Translator)X
+3841(for)X
+3953(REX)X
+10 s
+4218(2)X
+10 f
+806 424(h)N
+822(hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh)X
+3 f
+806 672(3.)N
+918(Spot)X
+1129(Language)X
+1561(Speci\256cation)X
+806 864(3.1.)N
+986(Spot)X
+1197(File)X
+1381(Sections)X
+1 f
+1006 988(The)N
+1179(Spot)X
+1377(translator)X
+1781(takes)X
+2012(as)X
+2124(input)X
+2355(a)X
+2430(speci\256cation)X
+2919(\256le)X
+3064(\(termed)X
+3386(a)X
+3 f
+3462(spot)X
+3670(\256le)X
+1 f
+3799(\))X
+3858(with)X
+4057(suf\256x)X
+806 1084(".d".)N
+1008(Each)X
+1223(Spot)X
+1418(speci\256cation)X
+1904(\256le)X
+2046(is)X
+2136(divided)X
+2434(into)X
+2606(two)X
+2766(sections)X
+3088(separated)X
+3479(by)X
+3593(the)X
+3740(delimiter)X
+3 f
+4106(%%)X
+1 f
+4240(.)X
+806 1180(The)N
+991(\256rst)X
+1187(section)X
+1488(is)X
+1593(composed)X
+1992(of)X
+2102(actions,)X
+2429(other)X
+2668(C-callable)X
+3079(subroutines,)X
+3581(and)X
+3763(the)X
+3 f
+3927(statelist)X
+806 1276(menu)N
+1 f
+1039(.)X
+1085(Actions)X
+1385(may)X
+1567(also)X
+1737(be)X
+1845(placed)X
+2106(in)X
+2204(user)X
+2390(libraries;)X
+2770(however,)X
+3126(placing)X
+3418(actions)X
+3704(speci\256c)X
+3996(to)X
+4090(indi-)X
+806 1372(vidual)N
+1063(paradigms)X
+1480(in)X
+1579(the)X
+1724(paradigm's)X
+2158(Spot)X
+2351(\256le)X
+2491(is)X
+2579(usually)X
+2877(much)X
+3108(more)X
+3321(convenient.)X
+3793(The)X
+3961(statelist)X
+806 1468(menu)N
+1039(is)X
+1125(user-de\256ned,)X
+1630(and)X
+1793(accessible)X
+2181(at)X
+2280(runtime)X
+2605(under)X
+2849(the)X
+2993(menu)X
+3225(name)X
+3 f
+3452(state_vars)X
+1 f
+3875(.)X
+3942(Between)X
+806 1564(the)N
+952(\256rst)X
+1131(and)X
+1296(second)X
+1570(sections)X
+1891(a)X
+3 f
+1961(%%)X
+1 f
+2121(delimiter)X
+2486(is)X
+2574(placed.)X
+2881(The)X
+3050(second)X
+3325(section)X
+3610(contains)X
+3948(the)X
+4095(Spot)X
+806 1660(state)N
+1021(set)X
+1161(speci\256cation)X
+1651(for)X
+1785(the)X
+1936(paradigm.)X
+2366(The)X
+2539(state)X
+2753(set)X
+2892(chains)X
+3163(of)X
+3261(the)X
+3412(paradigm)X
+3798(are)X
+3949(declared)X
+806 1756(here.)N
+1037(The)X
+1201(Spot)X
+1390(translator)X
+1785(produces)X
+2138(a)X
+2205(C)X
+2286(source)X
+2547(\256le,)X
+2706(with)X
+2896(the)X
+3039(suf\256x)X
+3267(".d.c")X
+3478(appended)X
+3858(to)X
+3952(the)X
+4095(Spot)X
+806 1852(\256le)N
+942(name.)X
+3 f
+806 2044(3.2.)N
+986(Include)X
+1325(Files)X
+1 f
+1006 2168(The)N
+1170(following)X
+1528(headers)X
+1842(are)X
+1984(included)X
+2322(automatically)X
+2852(in)X
+2948(the)X
+3090(C)X
+3170(source)X
+3430(produced)X
+3791(by)X
+3900(Spot:)X
+7 f
+1092 2312 -4.0000(#include)AN
+1488 -4.0000(<stdio.h>)AX
+1092 2408 -4.0000(#include)AN
+1488 -4.0000(<sys/types.h>)AX
+1092 2504 -4.0000(#include)AN
+1488 -4.0000("../hdr/sys.h")AX
+1092 2600 -4.0000(#include)AN
+1488 -4.0000("../hdr/cnf.h")AX
+1092 2696 -4.0000(#include)AN
+1488 -4.0000("../hdr/proc.h")AX
+1092 2792 -4.0000(#include)AN
+1488 -4.0000("../hdr/buf.h")AX
+1092 2888 -4.0000(#include)AN
+1488 -4.0000("../hdr/menu.h")AX
+1092 2984 -4.0000(#include)AN
+1488 -4.0000("../hdr/state.h")AX
+1092 3080 -4.0000(#include)AN
+1488 -4.0000("../hdr/ecode.h")AX
+1092 3176 -4.0000(#include)AN
+1488 -4.0000("../hdr/device.h")AX
+1092 3272 -4.0000(#include)AN
+1488 -4.0000("../hdr/cdsp.h")AX
+1092 3368 -4.0000(#include)AN
+1488 -4.0000("../hdr/idsp.h")AX
+1092 3464 -4.0000(#include)AN
+1488 -4.0000("../hdr/int.h")AX
+1 f
+1006 3636(Since)N
+1231(these)X
+1453(headers)X
+1770(are)X
+1915(automatically)X
+2448(added)X
+2695(by)X
+2807(Spot)X
+2999(they)X
+3187(should)X
+3459(not)X
+3605(be)X
+3715(included)X
+4057(again)X
+806 3732(in)N
+902(the)X
+1044(".d")X
+1196(Spot)X
+1385(\256le.)X
+3 f
+806 3924(3.3.)N
+986(Comments)X
+1 f
+1006 4048(Comments)N
+1427(are)X
+1572(allowed)X
+1879(anywhere,)X
+2289(and)X
+2453(unlike)X
+2714(comments)X
+3114(in)X
+3213(the)X
+3358(C)X
+3441(compiler,)X
+3807(they)X
+3995(may)X
+4178(be)X
+806 4144(nested.)N
+1115(They)X
+1322(are)X
+1464(stripped)X
+1793(out)X
+1935(of)X
+2024(the)X
+2166(output)X
+2434(\256le.)X
+3 f
+806 4336(3.4.)N
+986(State)X
+1224(Set)X
+1379(Declaration)X
+1 f
+1006 4460(Each)N
+1229(paradigm)X
+1620(must)X
+1845(start)X
+2061(with)X
+2265(the)X
+2422(keyword)X
+3 f
+2774(ident)X
+1 f
+3029(or)X
+3 f
+3142(id)X
+1 f
+(,)S
+3284(followed)X
+3626(by)X
+3750(the)X
+3907(paradigm)X
+806 4556(number)N
+1128(\(which)X
+1409(is)X
+1504(displayed)X
+1889(on)X
+2011(the)X
+2164(screen)X
+2435(at)X
+2543(run-time\).)X
+2975(This)X
+3172(is)X
+3267(not)X
+3420(optional)X
+3753(and)X
+3925(Spot)X
+4125(will)X
+806 4652(give)N
+985(an)X
+1106(error)X
+1322(if)X
+1402(it)X
+1486(is)X
+1576(not)X
+1724(included.)X
+2113(Optionally,)X
+2554(the)X
+2703(keyword)X
+3 f
+3047(restart)X
+1 f
+3363(followed)X
+3697(by)X
+3813(the)X
+3962(name)X
+4195(of)X
+806 4748(an)N
+921(initialization)X
+1419(subroutine)X
+1841(may)X
+2021(follow.)X
+1006 4872(A)N
+1095(Spot)X
+1293(\256le)X
+1438(may)X
+1628(have)X
+1836(multiple)X
+2180(independent)X
+2673(state)X
+2888(set)X
+3028(chains)X
+3300(which)X
+3553(are)X
+3705(executed)X
+4062(asyn-)X
+806 4968(chronously.)N
+1286(Each)X
+1505(of)X
+1604(the)X
+1756(asynchronous)X
+2297(chains)X
+2569(must)X
+2789(start)X
+3000(with)X
+3199(a)X
+3274(name)X
+3509(followed)X
+3845(by)X
+3963(an)X
+4087(open)X
+806 5064(curly)N
+1031(brace.)X
+1311(The)X
+1489(entire)X
+1746(chain)X
+1985(must)X
+2209(then)X
+2415(be)X
+2536(terminated)X
+2986(by)X
+3110(a)X
+3191(close)X
+3406(curly)X
+3632(brace.)X
+3913(After)X
+4142(the)X
+806 5160(opening)N
+1129(curly)X
+1349(brace)X
+1580(the)X
+1730(next)X
+1923(statement)X
+2327(must)X
+2545(be)X
+3 f
+2659(status)X
+1 f
+2941(or)X
+3 f
+3047(stat)X
+1 f
+(,)S
+3256(followed)X
+3591(by)X
+3 f
+3708(ON)X
+1 f
+3872(or)X
+3 f
+3978(OFF)X
+1 f
+4191(to)X
+806 5256(indicate)N
+1137(whether)X
+1479(the)X
+1634(chain)X
+1872(is)X
+1969(on)X
+2093(or)X
+2204(off)X
+2333(at)X
+2443(start)X
+2658(or)X
+2770(restart)X
+3061(time.)X
+3308(For)X
+3473(example,)X
+3840(for)X
+3979(a)X
+4059(chain)X
+806 5352(named)N
+3 f
+1078(chainA)X
+1 f
+1372(:)X
+
+3 p
+%%Page: 3 3
+10 s 10 xH 0 xS 1 f
+7 f
+1 f
+9 s
+2100 384(Chapter)N
+2406(2:)X
+2532(SPOT-)X
+2786(A)X
+2871(State)X
+3081(Process)X
+3364(Translator)X
+3753(for)X
+3878(REX)X
+10 s
+4218(3)X
+10 f
+806 424(h)N
+822(hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh)X
+7 f
+1092 720 -4.0000(id)AN
+1224 -4.0000(30)AX
+1092 816 -4.0000(restart)AN
+1444 -4.0000(foo)AX
+1092 912 -4.0000(chainA)AN
+1400({)X
+1092 1008 -4.0000(status)AN
+1400 -4.0000(ON)AX
+1445 1200 -4.0000(\(state)AN
+1753 -4.0000(set)AX
+1929 -4.0000(declarations...\))AX
+1092 1392(})N
+3 f
+806 1632(3.5.)N
+986(States)X
+1 f
+1006 1756(Each)N
+3 f
+1223(state)X
+1 f
+1456(begins)X
+1724(with)X
+1921(its)X
+2044(name)X
+2279(followed)X
+2615(by)X
+2733(a)X
+2808(colon,)X
+3051(e.g.)X
+3 f
+3209(fpon:)X
+1 f
+3419(.)X
+3494(The)X
+3 f
+3667(initial)X
+3954(state)X
+1 f
+4188(in)X
+806 1852(each)N
+1005(chain)X
+1238(must)X
+1456(be)X
+1570(indicated)X
+1942(by)X
+2059(preceding)X
+2450(it)X
+2536(with)X
+2733(the)X
+2883(keyword)X
+3 f
+3228(begin)X
+1 f
+3460(.)X
+3533(If)X
+3621(there)X
+3846(is)X
+3937(an)X
+4059(event)X
+806 1948(code)N
+999(to)X
+1101(be)X
+1216(put)X
+1374(into)X
+1551(the)X
+1703(event)X
+1938(buffer)X
+2193(when)X
+2425(the)X
+2577(state)X
+2792(is)X
+2886(entered,)X
+3222(it)X
+3310(must)X
+3530(be)X
+3646(next.)X
+3885(The)X
+4059(event)X
+806 2044(code)N
+990(is)X
+1074(speci\256ed)X
+1415(using)X
+1640(keyword)X
+3 f
+1977(code)X
+1 f
+2169(,)X
+2213(for)X
+2338(example)X
+3 f
+2669(code)X
+2883(1101)X
+1 f
+3089(or)X
+3 f
+3187(code)X
+3401(FPONCD)X
+1 f
+3783(.)X
+3 f
+1006 2168(Actions)N
+1 f
+1319(,)X
+3 f
+1372(running)X
+1744(line)X
+1934(levels)X
+1 f
+2171(,)X
+2224(and)X
+3 f
+2394(times)X
+1 f
+2652(follow)X
+2902(in)X
+3007(any)X
+3174(order)X
+3403(with)X
+3602(the)X
+3754(following)X
+4122(res-)X
+806 2264(triction:)N
+3 f
+1128(time)X
+1 f
+1342(and)X
+3 f
+1508(random)X
+1 f
+1860(must)X
+2075(be)X
+2186(adjoining)X
+2558(in)X
+2659(either)X
+2906(order.)X
+3174(Running)X
+3522(line)X
+3687(levels)X
+3923(are)X
+2 f
+4069(abso-)X
+806 2360(lute)N
+1 f
+969(when)X
+1193(not)X
+1337(preceded)X
+1691(by)X
+1802(a)X
+3 f
+1870(+)X
+1 f
+1942(or)X
+3 f
+2042(-)X
+1 f
+2069(,)X
+2115(and)X
+2 f
+2278(relative)X
+1 f
+2580(when)X
+2804(they)X
+2991(are)X
+3135(preceded)X
+3489(by)X
+3600(a)X
+3 f
+3668(+)X
+1 f
+3740(or)X
+3 f
+3840(-)X
+1 f
+3867(.)X
+3935(The)X
+4101(run-)X
+806 2456(ning)N
+998(line)X
+1163(level)X
+1362(is)X
+1450(displayed)X
+1828(on)X
+1943(the)X
+2088(REX)X
+2285(moving)X
+2581(display)X
+2872(as)X
+2978(a)X
+3047(continuous)X
+3477(line)X
+3641(at)X
+3741(different)X
+4087(posi-)X
+806 2552(tions)N
+1010(on)X
+1121(the)X
+1263(screen.)X
+1567(Its)X
+1689(keyword)X
+2026(speci\256er)X
+2357(is)X
+3 f
+2441(rl)X
+1 f
+2511(.)X
+2577(An)X
+2706(example)X
+3037(of)X
+3126(a)X
+3 f
+3192(state)X
+1 f
+3395(:)X
+7 f
+1092 2696 -4.0000(fpon:)AN
+1445 2792 -4.0000(code)AN
+1665 -4.0000(FPONCD)AX
+1445 2888 -4.0000(do)AN
+1577 -4.0000(dio_on\(LED1\))AX
+1445 2984 -4.0000(rl)AN
+1577 -4.0000(+30)AX
+1445 3080 -4.0000(time)AN
+1665 -4.0000(2000)AX
+1445 3176 -4.0000(rand)AN
+1665 -4.0000(1000)AX
+3 f
+806 3416(3.5.1.)N
+1054(Actions)X
+1006 3540(Actions)N
+1 f
+1361(are)X
+1523(C-callable)X
+1933(subroutines.)X
+2456(One)X
+2649(action)X
+2916(is)X
+3021(allowed)X
+3346(per)X
+3511(state,)X
+3759(and)X
+3941(is)X
+4046(called)X
+806 3636(immediately)N
+1296(when)X
+1525(the)X
+1674(state)X
+1885(is)X
+1975(entered.)X
+2 f
+2329(Note)X
+2526(that)X
+2705(the)X
+2846(initial)X
+3105(state)X
+3307(of)X
+3402(a)X
+3476(chain)X
+3711(cannot)X
+3987(contain)X
+806 3732(an)N
+923(action.)X
+1 f
+1215(An)X
+1344(action)X
+1591(is)X
+1675(identi\256ed)X
+2048(by)X
+2157(the)X
+2299(keyword)X
+3 f
+2637(do)X
+1 f
+2739(.)X
+2806(Actions)X
+3105(may)X
+3286(have)X
+3485(up)X
+3603(to)X
+3697(six)X
+2 f
+3825(long)X
+4007(integer)X
+1 f
+806 3828(arguments.)N
+2 f
+1276(NOTE!)X
+1 f
+1569(If)X
+1654(you)X
+1812(write)X
+2032(your)X
+2226(own)X
+2403(actions,)X
+2713(you)X
+2871(must)X
+3084(declare)X
+3376(any)X
+3537(arguments)X
+3962(as)X
+4068(longs)X
+806 3924(so)N
+907(that)X
+1087(they)X
+1275(will)X
+1437(be)X
+1546(accessed)X
+1887(properly)X
+2224(by)X
+2336(the)X
+2481(C)X
+2564(compiler.)X
+2952(Action)X
+3216(arguments)X
+3641(can)X
+3795(be)X
+3904(examined)X
+806 4020(and)N
+967(changed)X
+1296(through)X
+1615(the)X
+1757(REX)X
+1951(menu)X
+2182(system)X
+2463(at)X
+2560(run)X
+2716(time.)X
+1006 4144(All)N
+1140(actions)X
+2 f
+1428(must)X
+1 f
+1638(return)X
+1905(an)X
+2024(integer)X
+2314(value.)X
+2585(If)X
+2670(the)X
+2816(return)X
+3083(value)X
+3310(is)X
+3398(non-zero,)X
+3766(it)X
+3849(is)X
+3938(assumed)X
+806 4240(to)N
+904(be)X
+1015(an)X
+1134(ecode)X
+1362(and)X
+1527(is)X
+1615(loaded)X
+1882(into)X
+2053(the)X
+2199(event)X
+2428(buffer.)X
+2721(Note)X
+2923(that)X
+3104(only)X
+2 f
+3287(one)X
+1 f
+3438(ecode)X
+3666(per)X
+3814(state)X
+4023(can)X
+4178(be)X
+806 4336(loaded)N
+1085(into)X
+1268(the)X
+1426(event)X
+1667(buffer.)X
+1972(An)X
+2117(ecode)X
+2357(returned)X
+2722(by)X
+2847(an)X
+2978(action)X
+3242(has)X
+2 f
+3411(priority)X
+1 f
+3730(over)X
+3928(an)X
+4060(ecode)X
+806 4432(declared)N
+1141(as)X
+1244(part)X
+1423(of)X
+1512(the)X
+1654(state)X
+1859(using)X
+2084(the)X
+3 f
+2226(code)X
+1 f
+2440(keyword,)X
+2799(and)X
+2960(will)X
+3119(be)X
+3225(entered)X
+3529(instead.)X
+3 f
+806 4624(3.5.2.)N
+1054(Escapes)X
+1006 4748(Escapes)N
+1 f
+1361(have)X
+1559(the)X
+1701(following)X
+2059(format)X
+2330(-)X
+7 f
+1092 4892 -4.0000(1.\))AN
+1445 -4.0000(to)AX
+1577 -4.0000(nextstate)AX
+2017 -4.0000([on)AX
+2193 -4.0000(time])AX
+1092 4988 -4.0000(2.\))AN
+1445 -4.0000(to)AX
+1577 -4.0000(nextstate)AX
+2017 -4.0000(on)AX
+2149 -4.0000(+,-CONSTANT)AX
+2721(&)X
+2809 -4.0000(int_variable_name_or_address)AX
+1092 5084 -4.0000(3.\))AN
+1445 -4.0000(to)AX
+1577 -4.0000(nextstate)AX
+2017 -4.0000(on)AX
+2149 -4.0000([+,-]CONSTANT)AX
+2765(>)X
+2853 -4.0000(int_variable_name_or_address)AX
+1092 5180 -4.0000(4.\))AN
+1445 -4.0000(to)AX
+1577 -4.0000(nextstate)AX
+2017 -4.0000(on)AX
+2149 -4.0000([+,-]CONSTANT)AX
+2765(<)X
+2853 -4.0000(int_variable_name_or_address)AX
+1092 5276 -4.0000(5.\))AN
+1445 -4.0000(to)AX
+1577 -4.0000(nextstate)AX
+2017 -4.0000(on)AX
+2149 -4.0000([+,-]CONSTANT)AX
+2765(=)X
+2853 -4.0000(int_variable_name_or_address)AX
+1092 5372 -4.0000(6.\))AN
+1445 -4.0000(to)AX
+1577 -4.0000(nextstate)AX
+2017 -4.0000(on)AX
+2149 -4.0000([+,-]CONSTANT)AX
+2765(?)X
+2853 -4.0000(int_variable_name_or_address)AX
+1092 5468 -4.0000(7.\))AN
+1445 -4.0000(to)AX
+1577 -4.0000(nextstate)AX
+2017 -4.0000(on)AX
+2149 -4.0000([+,-]CONSTANT)AX
+2765(%)X
+2853 -4.0000(function_name_or_address)AX
+1 f
+1006 5640(The)N
+1173(keyword)X
+1513(that)X
+1693(indicates)X
+2051(an)X
+2169(escape)X
+2438(is)X
+3 f
+2526(to)X
+1 f
+2609(.)X
+2679(The)X
+2847(next)X
+3036(word)X
+3246(is)X
+3334(the)X
+3480(name)X
+3710(of)X
+3803(a)X
+3873(state)X
+4082(to)X
+4179(go)X
+806 5736(to)N
+907(on)X
+1026(transition.)X
+1467(Conditions)X
+1897(for)X
+2030(transition)X
+2427(are)X
+2577(speci\256ed)X
+2926(after)X
+3134(the)X
+3284(keyword)X
+3 f
+3628(on)X
+1 f
+3732(.)X
+3805(A)X
+3892(state)X
+4104(may)X
+806 5832(contain)N
+1109(up)X
+1233(to)X
+1333(ten)X
+1482(escapes.)X
+1835(Each)X
+2051(escape)X
+2323(is)X
+2414(tested)X
+2668(in)X
+2771(sequence.)X
+3179(A)X
+3267(transition)X
+3664(occurs)X
+3928(upon)X
+4142(the)X
+
+4 p
+%%Page: 4 4
+10 s 10 xH 0 xS 1 f
+9 s
+2292 384(Chapter)N
+2585(2:)X
+2685(SPOT-)X
+2926(A)X
+2998(State)X
+3195(Process)X
+3465(Translator)X
+3841(for)X
+3953(REX)X
+10 s
+4218(4)X
+10 f
+806 424(h)N
+822(hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh)X
+2 f
+806 672(\256rst)N
+1 f
+989(escape)X
+1266(that)X
+1455(tests)X
+1665(true.)X
+1899(After)X
+2125(an)X
+2252(escape)X
+2529(tests)X
+2739(true,)X
+2951(transition)X
+3352(occurs)X
+3620(immediately-)X
+4142(the)X
+806 768(remaining)N
+1210(escapes)X
+1512(in)X
+1608(the)X
+1750(state)X
+1955(are)X
+2097(not)X
+2239(evaluated.)X
+1006 892(The)N
+1170(tests)X
+1368(for)X
+1493(transition)X
+1882(in)X
+1978(an)X
+2093(escape)X
+2359(all)X
+2476(have)X
+2675(the)X
+2818(same)X
+3033(form:)X
+3252(a)X
+3319(constant)X
+3659(\(CONSTANT\))X
+4200(is)X
+806 988(evaluated)N
+1199(against)X
+1503(a)X
+1578(memory)X
+1910(location)X
+2231(\(int_variable_name_or_address\),)X
+3470(or)X
+3577(the)X
+3727(integer)X
+4021(return)X
+806 1084(from)N
+1215(a)X
+1494(function)X
+2035(call)X
+2400(\(function_name_or_address\).)X
+3725(The)X
+4102(\256eld)X
+3 f
+806 1180(int_variable_name_or_address)N
+1 f
+2103(can)X
+2264(be)X
+2380(either)X
+2632(the)X
+2783(name)X
+3018(of)X
+3116(a)X
+3191(variable,)X
+3545(or)X
+3652(the)X
+3803(address)X
+4120(of)X
+4218(a)X
+806 1276(variable.)N
+1182(Spot)X
+1380(distinguishes)X
+1904(between)X
+2242(these)X
+2471(two)X
+2636(cases)X
+2862(as)X
+2975(follows.)X
+3307(If)X
+3398(the)X
+3550(name)X
+3786(is)X
+3880(a)X
+3956(numeric)X
+806 1372(constant,)N
+1168(or)X
+1267(the)X
+1410(\256rst)X
+1586(letter)X
+1812(is)X
+1896(upper)X
+2135(case,)X
+2336(it)X
+2414(is)X
+2498(assumed)X
+2844(to)X
+2937(be)X
+3043(the)X
+2 f
+3185(address)X
+1 f
+3495(of)X
+3584(a)X
+3650(variable.)X
+4017(Other-)X
+806 1468(wise,)N
+1089(it)X
+1242(is)X
+1401(assumed)X
+1822(to)X
+1990(be)X
+2171(the)X
+2 f
+2388(name)X
+1 f
+2687(of)X
+2851(a)X
+2992(variable.)X
+3434(Likewise,)X
+3884(the)X
+4102(\256eld)X
+3 f
+806 1564(function_name_or_address)N
+1 f
+1946(can)X
+2101(either)X
+2348(be)X
+2458(the)X
+2604(name)X
+2834(of)X
+2927(a)X
+2997(function,)X
+3351(or)X
+3453(the)X
+3599(address)X
+3911(of)X
+4004(a)X
+4074(func-)X
+806 1660(tion.)N
+1017(The)X
+1181(same)X
+1395(rules)X
+1604(are)X
+1746(applied)X
+2040(as)X
+2143(for)X
+2268(variables)X
+2628(to)X
+2721(distinguish)X
+3159(between)X
+3487(the)X
+3629(two.)X
+3828(Examples:)X
+7 f
+1092 1804 -4.0000(to)AN
+1224 -4.0000(nexstate)AX
+1620 -4.0000(on)AX
+1752 -4.0000(+01)AX
+1928(&)X
+2016 -4.0000(goo)AX
+2857 -4.0000(/*)AX
+2989 -4.0000(goo)AX
+3165 -4.0000(is)AX
+3297 -4.0000(name)AX
+3517 -4.0000(of)AX
+3649 -4.0000(variable)AX
+4045 -4.0000(*/)AX
+1092 1900 -4.0000(to)AN
+1224 -4.0000(nexstate)AX
+1620 -4.0000(on)AX
+1752 -4.0000(+01)AX
+1928(&)X
+2016 -4.0000(0x20)AX
+2857 -4.0000(/*)AX
+2989 -4.0000(0x20)AX
+3209 -4.0000(is)AX
+3341 -4.0000(memory)AX
+3649 -4.0000(address)AX
+4001 -4.0000(*/)AX
+1092 1996 -4.0000(#define)AN
+1444 -4.0000(FLAG)AX
+1664 -4.0000(0x20)AX
+1092 2092 -4.0000(to)AN
+1224 -4.0000(nexstate)AX
+1620 -4.0000(on)AX
+1752 -4.0000(+01)AX
+1928(&)X
+2016 -4.0000(FLAG)AX
+2857 -4.0000(/*)AX
+2989 -4.0000(FLAG)AX
+3209 -4.0000(is)AX
+3341 -4.0000(memory)AX
+3649 -4.0000(address)AX
+4001 -4.0000(*/)AX
+1 f
+1006 2264(The)N
+1180(PC)X
+1323(architecture,)X
+1830(as)X
+1943(opposed)X
+2270(to)X
+2373(the)X
+2526(pdp11,)X
+2807(has)X
+2970(separate)X
+3321(memory)X
+3655(and)X
+3827(I/O)X
+3976(address)X
+806 2360(spaces.)N
+1169(One)X
+1399(is)X
+1540(forced)X
+1844(to)X
+1994(use)X
+2199(I/O)X
+2394(instructions)X
+2918(to)X
+3068(access)X
+3376(I/O)X
+3570(ports.)X
+3882(The)X
+4102(\256eld)X
+3 f
+806 2456(int_variable_name_or_address)N
+1 f
+2100(is)X
+2 f
+2191(always)X
+1 f
+2477(in)X
+2580(the)X
+2730(memory)X
+3061(address)X
+3377(space.)X
+3654(There)X
+3902(is)X
+3994(no)X
+4113(way)X
+806 2552(to)N
+899(access)X
+1151(the)X
+1293(I/O)X
+1431(address)X
+1739(space)X
+1964(in)X
+2060(an)X
+2175(escape)X
+2440(test.)X
+3 f
+806 2744(3.5.2.1.)N
+1122(Transition)X
+1586(on)X
+1712(Timer)X
+1987(Countdown)X
+2492(to)X
+2597(Zero:)X
+2831('time')X
+1 f
+1006 2868(This)N
+1202(escape)X
+1477(condition)X
+1851(results)X
+2139(in)X
+2246(a)X
+2323(transition)X
+2723(when)X
+2956(the)X
+3109(timer)X
+3345(ticks)X
+3555(down)X
+3785(to)X
+3889(zero.)X
+4120(The)X
+806 2964(last)N
+965(two)X
+1120(words)X
+1363(")X
+3 f
+1394(on)X
+1520(time)X
+1 f
+1707(")X
+1760(are)X
+1902(assumed,)X
+2270(and)X
+2431(are)X
+2573(optional.)X
+3 f
+806 3156(3.5.2.2.)N
+1122(Transition)X
+1586(On)X
+1730(Bit)X
+1878(Test:)X
+2100('&')X
+1 f
+1006 3280(This)N
+1196(escape)X
+1465(condition)X
+1832(performs)X
+2191(a)X
+2 f
+2261(bitwise)X
+2547(and)X
+1 f
+2717(between)X
+3049(the)X
+3195(CONSTANT)X
+3685(and)X
+3851(the)X
+3998(integer)X
+806 3376(variable.)N
+1181(If)X
+1270(the)X
+1420(CONSTANT)X
+1913(is)X
+2004(preceded)X
+2363(by)X
+2479(a)X
+3 f
+2552(+)X
+1 f
+2600(,)X
+2651(transition)X
+3047(occurs)X
+3310(if)X
+3391(the)X
+3540(result)X
+3787(of)X
+3883(the)X
+4032(test)X
+4200(is)X
+2 f
+806 3472(true)N
+1 f
+955(.)X
+1025(If)X
+1111(the)X
+1258(CONSTANT)X
+1749(is)X
+1838(preceded)X
+2195(by)X
+2309(a)X
+3 f
+2380(-)X
+1 f
+2407(,)X
+2456(transition)X
+2850(occurs)X
+3111(if)X
+3190(the)X
+3337(result)X
+3582(of)X
+3676(the)X
+3823(test)X
+3989(if)X
+2 f
+4068(false)X
+1 f
+4240(.)X
+806 3568(This)N
+995(test,)X
+1181(then,)X
+1397(will)X
+1559(result)X
+1802(in)X
+1901(a)X
+1970(transition)X
+2362(for)X
+2490(the)X
+3 f
+2635(+)X
+1 f
+2708(case)X
+2890(when)X
+2 f
+3115(any)X
+1 f
+3275(of)X
+3367(the)X
+3512(bits)X
+3674(set)X
+3807(in)X
+3906(the)X
+4050(CON-)X
+806 3664(STANT)N
+1108(are)X
+1251(also)X
+1420(set)X
+1551(in)X
+1649(the)X
+1793(variable.)X
+2162(For)X
+2315(the)X
+3 f
+2459(-)X
+1 f
+2510(case)X
+2691(transition)X
+3082(results)X
+3361(only)X
+3542(when)X
+2 f
+3766(all)X
+1 f
+3890(of)X
+3981(the)X
+4125(bits)X
+806 3760(set)N
+937(in)X
+1034(the)X
+1177(CONSTANT)X
+1664(are)X
+1807(also)X
+2 f
+1976(not)X
+1 f
+2116(set)X
+2247(in)X
+2344(the)X
+2487(variable.)X
+2855(Note)X
+3054(that)X
+3231(the)X
+3 f
+3373(+)X
+1 f
+3443(or)X
+3 f
+3541(-)X
+1 f
+3590(sign)X
+3766(is)X
+3850(required)X
+4188(in)X
+806 3856(this)N
+970(condition.)X
+3 f
+806 4048(3.5.2.3.)N
+1122(Transition)X
+1586(on)X
+1712(Comparison)X
+2240(Test:)X
+2462('>',)X
+2592('<',)X
+2722('=')X
+1 f
+1006 4172(This)N
+1196(escape)X
+1465(condition)X
+1832(performs)X
+2192(a)X
+2263(comparison)X
+2714(between)X
+3047(the)X
+3194(CONSTANT)X
+3685(and)X
+3851(the)X
+3998(integer)X
+806 4268(variable.)N
+1176(If)X
+1260(the)X
+1405(CONSTANT)X
+1893(is)X
+2 f
+1979(greater)X
+2264(than)X
+1 f
+2460(\()X
+3 f
+2487(>)X
+1 f
+2535(\),)X
+2 f
+2608(less)X
+2767(than)X
+1 f
+2963(\()X
+3 f
+2990(<)X
+1 f
+3038(\),)X
+3111(or)X
+2 f
+3211(equal)X
+3437(to)X
+1 f
+3529(\()X
+3 f
+3556(=)X
+1 f
+3604(\))X
+3655(the)X
+3799(integer)X
+4087(vari-)X
+806 4364(able,)N
+1005(transition)X
+1396(occurs.)X
+1698(The)X
+1864(sign)X
+2042(is)X
+2128(optional.)X
+2496(If)X
+2579(it)X
+2659(is)X
+2746(not)X
+2891(present,)X
+3217(the)X
+3362(CONSTANT)X
+3851(is)X
+3938(assumed)X
+806 4460(to)N
+899(be)X
+1005(positive.)X
+3 f
+806 4652(3.5.2.4.)N
+1122(Transition)X
+1586(on)X
+1712(Query:)X
+2015('?')X
+1 f
+1006 4776(This)N
+1206(escape)X
+1485(condition)X
+1863(\256rst)X
+2053(performs)X
+2423(a)X
+2504(comparison)X
+2965(between)X
+3308(the)X
+3465(CONSTANT)X
+3966(and)X
+4142(the)X
+806 4872(integer)N
+1097(variable,)X
+1447(then)X
+2 f
+1643(decrements)X
+1 f
+2083(the)X
+2230(integer)X
+2520(variable.)X
+2891(If)X
+2976(the)X
+3122(integer)X
+3412(variable)X
+3739(is)X
+2 f
+3827(less)X
+3988(than)X
+4186(or)X
+806 4968(equal)N
+1030(to)X
+1 f
+1120(the)X
+1262(CONSTANT,)X
+1770(transition)X
+2159(occurs.)X
+3 f
+806 5160(3.5.2.5.)N
+1122(Transition)X
+1586(on)X
+1712(Return)X
+2031(Value)X
+2292(of)X
+2394(Function:)X
+2818('%')X
+1 f
+1006 5284(This)N
+1208(escape)X
+1489(condition)X
+1868(\256rst)X
+2059(calls)X
+2264(the)X
+2422(function)X
+2766(whose)X
+3033(name)X
+3276(or)X
+3391(address)X
+3716(is)X
+3817(speci\256ed)X
+4175(by)X
+3 f
+806 5380(function_name_or_address)N
+1 f
+1920(.)X
+1988(The)X
+2154(integer)X
+2442(return)X
+2707(value)X
+2932(from)X
+3130(this)X
+3296(function)X
+3626(is)X
+3711(then)X
+3903(compared)X
+806 5476(to)N
+899(CONSTANT.)X
+1429(If)X
+1510(they)X
+1695(are)X
+2 f
+1837(equal)X
+1 f
+2039(,)X
+2083(transition)X
+2472(occurs.)X
+
+5 p
+%%Page: 5 5
+10 s 10 xH 0 xS 1 f
+9 s
+2292 384(Chapter)N
+2585(2:)X
+2685(SPOT-)X
+2926(A)X
+2998(State)X
+3195(Process)X
+3465(Translator)X
+3841(for)X
+3953(REX)X
+10 s
+4218(5)X
+10 f
+806 424(h)N
+822(hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh)X
+3 f
+806 672(3.6.)N
+986(Error)X
+1244(Handling:)X
+1677(Abort)X
+1937(List)X
+1 f
+1006 796(When)N
+1250(an)X
+1371(error)X
+1587(or)X
+1691(special)X
+1972(condition)X
+2341(occurs)X
+2603(during)X
+2879(state)X
+3090(set)X
+3226(processing)X
+3643(it)X
+3727(is)X
+3817(often)X
+4033(neces-)X
+806 892(sary)N
+989(for)X
+1115(certain)X
+3 f
+1399(actions)X
+1 f
+1722(to)X
+1815(be)X
+1921(executed)X
+2268(to)X
+2361(effect)X
+2584(a)X
+2650(reinitialization)X
+3224(or)X
+3322(resetting)X
+3676(to)X
+3769(known)X
+4039(condi-)X
+806 988(tions)N
+1022(\(for)X
+1186(example,)X
+1551(turning)X
+1868(off)X
+1997(stimuli,)X
+2317(returning)X
+2710(mirrors)X
+3026(to)X
+3132(center,)X
+3421(etc.\).)X
+3656(A)X
+3749(special)X
+4037(action)X
+806 1084(exists)N
+1055(to)X
+1162(facilitate)X
+1526(this)X
+1704(named)X
+3 f
+1989(reset_s\(arg\))X
+1 f
+2479(.)X
+2558(The)X
+2735(state)X
+2953(names)X
+3229(containing)X
+3655(the)X
+3810(actions)X
+4107(that)X
+806 1180(should)N
+1092(be)X
+1216(executed)X
+1581(on)X
+1710(error)X
+1938(are)X
+2098(listed)X
+2342(after)X
+2560(the)X
+2720(keyword)X
+3 f
+3075(abort)X
+3341(list:)X
+1 f
+3535(.)X
+3619(When)X
+3876(the)X
+4037(action)X
+3 f
+806 1276(reset_s\(arg\))N
+1 f
+1323(is)X
+1412(called,)X
+1677(the)X
+1824(actions)X
+2113(speci\256ed)X
+2459(in)X
+2560(the)X
+2707(abort)X
+2929(list)X
+3074(will)X
+3237(be)X
+3347(executed)X
+3698(in)X
+3798(sequence.)X
+4203(If)X
+3 f
+806 1372(arg)N
+1 f
+979(is)X
+3 f
+1074(-1)X
+1 f
+1180(\(the)X
+1360(usual)X
+1597(case\))X
+1814(the)X
+1967(abort)X
+2195(list)X
+2346(of)X
+2446(all)X
+2573(chains)X
+2846(will)X
+3016(be)X
+3133(executed.)X
+3535(If)X
+3 f
+3627(arg)X
+1 f
+3801(is)X
+3897(a)X
+3975(positive)X
+806 1468(number,)N
+1139(the)X
+1281(abort)X
+1498(list)X
+1638(of)X
+1727(only)X
+1906(that)X
+2083(chain)X
+2308(will)X
+2467(be)X
+2573(executed.)X
+1006 1592(Note)N
+1214(the)X
+1366(following)X
+1734(distinctions)X
+2197(between)X
+2535(the)X
+3 f
+2687(abort)X
+2946(list)X
+1 f
+3111(keyword)X
+3459(and)X
+3631(the)X
+3 f
+3784(restart)X
+1 f
+4104(key-)X
+806 1688(word.)N
+1057(After)X
+1271(the)X
+3 f
+1413(abort)X
+1661(list)X
+1 f
+1815(keyword)X
+2152(one)X
+2303(places)X
+2553(the)X
+2695(name)X
+2921(of)X
+2 f
+3010(states)X
+1 f
+3220(.)X
+3286(The)X
+2 f
+3450(actions)X
+1 f
+3734(of)X
+3823(these)X
+4042(states)X
+806 1784(are)N
+954(called)X
+1198(whenever)X
+1585(the)X
+3 f
+1733(reset_s\(\))X
+1 f
+2111(action)X
+2364(is)X
+2454(executed,)X
+2829(or)X
+2933(during)X
+3209(a)X
+3 f
+3282(reset)X
+3519(statelist)X
+1 f
+3883(command.)X
+806 1880(Note,)N
+1038(however,)X
+1404(ecodes)X
+1677(will)X
+2 f
+1848(not)X
+1 f
+1999(be)X
+2117(entered)X
+2433(into)X
+2612(the)X
+2766(event)X
+3003(buffer)X
+3260(from)X
+3468(actions)X
+3764(called)X
+4013(in)X
+4120(this)X
+806 1976(manner)N
+1117(from)X
+1313(the)X
+1455(abort)X
+1672(list.)X
+1006 2100(After)N
+1220(the)X
+3 f
+1363(restart)X
+1 f
+1673(keyword)X
+2011(one)X
+2163(places)X
+2414(a)X
+2481(single)X
+2 f
+2723(C)X
+2804(function)X
+3132(name)X
+1 f
+3357(\(not)X
+3527(a)X
+3594(state)X
+3800(name\).)X
+4098(This)X
+806 2196(function)N
+2 f
+1139(may)X
+1 f
+1323(in)X
+1424(turn)X
+1616(call)X
+1773(actions,)X
+2084(or)X
+2187(other)X
+2410(C)X
+2495(functions.)X
+2909(The)X
+3078(function)X
+3411(speci\256ed)X
+3757(after)X
+3961(the)X
+3 f
+4107(res-)X
+806 2292(tart)N
+1 f
+994(keyword)X
+1338(will)X
+1504(be)X
+1617(executed)X
+1971(the)X
+2 f
+2120(\256rst)X
+1 f
+2298(time)X
+2494(the)X
+2643(clock)X
+2858(is)X
+2950(begun,)X
+3227(and)X
+3396(afterwards)X
+3829(whenever)X
+4218(a)X
+3 f
+806 2388(reset)N
+1036(statelist)X
+1 f
+1393(command)X
+1772(is)X
+1856(issued.)X
+1006 2512(When)N
+1244(the)X
+3 f
+1386(reset)X
+1616(statelist)X
+1 f
+1973(command)X
+2352(is)X
+2436(issued,)X
+2714(the)X
+2856(state)X
+3061(processor)X
+3431(does)X
+3616(the)X
+3758(following:)X
+806 2636(1.\))N
+1006(Calls)X
+3 f
+1217(reset_s\(-1\))X
+1 f
+1662(which)X
+1905(results)X
+2182(in)X
+2278(the)X
+3 f
+2420(abort_list)X
+1 f
+2840(actions)X
+3124(being)X
+3347(executed.)X
+806 2760(2.\))N
+1006(Executes)X
+1362(the)X
+1504(function)X
+1832(speci\256ed)X
+2173(after)X
+2373(the)X
+2515('restart')X
+2824(keyword.)X
+806 2884(3.\))N
+1006(Reinitializes)X
+1490(the)X
+1632(state)X
+1837(list)X
+1977(chains)X
+2239(to)X
+2332(the)X
+2474(\256rst)X
+2649(state.)X
+806 3008(4.\))N
+1006(Enters)X
+1282(into)X
+1452(the)X
+1597(event)X
+1826(buffer)X
+2075(an)X
+2194(ecode)X
+2422(composed)X
+2804(of)X
+2897(the)X
+3043(paradigm)X
+3424(number)X
+3739(speci\256ed)X
+4084(after)X
+1006 3104(the)N
+1161('id')X
+1299(keyword)X
+1649(or'ed)X
+1862(with)X
+2064(the)X
+3 f
+2219(INIT_MASK)X
+1 f
+2713(.)X
+2792(This)X
+2991(also)X
+3172(causes)X
+3450(the)X
+3 f
+3604(comm)X
+1 f
+3885(process)X
+4191(to)X
+1006 3200(reprint)N
+1291(the)X
+1433(status)X
+1684(line)X
+1845(showing)X
+2172(the)X
+3 f
+2314(id)X
+1 f
+2419(and)X
+2580(current)X
+2879(time.)X
+3 f
+806 3392(3.7.)N
+986(General)X
+1341(Considerations)X
+1 f
+1006 3516(Numbers)N
+1371(preceded)X
+1724(by)X
+1834(a)X
+1901(zero)X
+2078(are)X
+2221(passed)X
+2494(on)X
+2607(to)X
+2702(the)X
+2846(C)X
+2928(compiler)X
+3271(as)X
+3376(they)X
+3563(are,)X
+3729(so)X
+3830(they)X
+4017(will)X
+4178(be)X
+806 3612(treated)N
+1102(as)X
+1211(octal.)X
+1459(White)X
+1710(space)X
+1941(is)X
+2031(free,)X
+2224(so)X
+2328(use)X
+2481(it)X
+2564(liberally)X
+2898(to)X
+2996(make)X
+3226(your)X
+3421(code)X
+3610(clear)X
+3818(to)X
+3916(the)X
+4063(users)X
+806 3708(and)N
+967(yourself.)X
+1006 3832(Error)N
+1245(checking)X
+1604(by)X
+1724(Spot)X
+1924(is)X
+2019(miniscule.)X
+2431(If)X
+2523(a)X
+2600(syntax)X
+2880(error)X
+3101(is)X
+3196(detected)X
+3539(the)X
+3692(line)X
+3864(number)X
+4187(at)X
+806 3928(which)N
+1057(it)X
+1143(is)X
+1235(recognized)X
+1658(will)X
+1825(be)X
+1939(reported,)X
+2306(and)X
+2475(Spot)X
+2672(will)X
+2839(terminate.)X
+3280(Line)X
+3476(numbers)X
+3831(reported)X
+4175(by)X
+806 4024(Spot)N
+997(refer)X
+1200(to)X
+1295(lines)X
+1496(in)X
+1595(the)X
+1740(".d")X
+1895(Spot)X
+2087(\256le.)X
+2270(Errors)X
+2538(might)X
+2782(also)X
+2953(be)X
+3062(reported)X
+3402(later)X
+3603(by)X
+3715(the)X
+3860(C)X
+3943(compiler)X
+806 4120(when)N
+1037(the)X
+1188(C)X
+1277(source)X
+1546(\256le)X
+1690(generated)X
+2089(by)X
+2206(Spot,)X
+2425(the)X
+2575(".d.c")X
+2793(\256le,)X
+2959(is)X
+3051(compiled.)X
+3454(In)X
+3565(this)X
+3737(case)X
+3924(the)X
+4074(error)X
+806 4216(line)N
+971(numbers)X
+1323(will)X
+1486(refer)X
+1691(to)X
+1788(the)X
+1934(".d.c")X
+2148(\256le.)X
+2332(Corrections)X
+2786(must)X
+3000(be)X
+3110(made,)X
+3360(however,)X
+3719(to)X
+3817(the)X
+3964(input)X
+4191(to)X
+806 4312(Spot,)N
+1026(the)X
+1177(".d")X
+1338(\256le,)X
+1505(and)X
+1675(not)X
+1825(to)X
+1926(the)X
+2076(intermediate)X
+2584(".d.c")X
+2802(\256le.)X
+2990(The)X
+3162(user)X
+3354(is)X
+3446(responsible)X
+3895(for)X
+4028(seeing)X
+806 4408(that)N
+991(escapes)X
+1301(actually)X
+1628(go)X
+1741(to)X
+1842(existing)X
+2165(states.)X
+2459(The)X
+2631(C)X
+2719(compiler)X
+3068(might)X
+3317(catch)X
+3544(this)X
+3717(error,)X
+3958(but)X
+4113(it)X
+4200(is)X
+806 4504(not)N
+948(guaranteed.)X
+1006 4628(A)N
+1098(few)X
+1261(debugging)X
+1677(aids)X
+1863(exist)X
+2074(at)X
+2184(run-time.)X
+2591(The)X
+2768(running)X
+3103(line)X
+3277(display)X
+3578(is)X
+3675(often)X
+3897(useful)X
+4159(for)X
+806 4724(debugging)N
+1225(since)X
+1449(its)X
+1579(level)X
+1789(is)X
+1888(determined)X
+2349(by)X
+2473(values)X
+2747(speci\256ed)X
+3102(in)X
+3212(the)X
+3368(state)X
+3587(declarations.)X
+4120(The)X
+806 4820(variable)N
+3 f
+1132(debug-state)X
+1 f
+1642(in)X
+1741(the)X
+3 f
+1886(control-param)X
+1 f
+2509(menu,)X
+2765(when)X
+2990(non-zero,)X
+3356(causes)X
+3624(the)X
+3770(name)X
+4000(of)X
+4093(each)X
+806 4916(state)N
+1011(to)X
+1104(be)X
+1210(printed)X
+1505(on)X
+1616(the)X
+1758(console)X
+2047(when)X
+2269(entered.)X
+1006 5040(Debugging)N
+1434(messages)X
+1813(can)X
+1972(be)X
+2087(printed)X
+2391(by)X
+2509(using)X
+2743(the)X
+2894(routines)X
+3 f
+3232(dprintf\(\),)X
+3645(dputchar\(\))X
+1 f
+4123(and)X
+3 f
+806 5136(dputs\(\))N
+1 f
+1103(.)X
+1184(If)X
+1280(one)X
+1446(of)X
+1550(these)X
+1784(routines)X
+2128(is)X
+2227(called)X
+2480(from)X
+2691(the)X
+2847(interrupt)X
+3226(level,)X
+3457(or)X
+3569(when)X
+3805(the)X
+3961(variable)X
+3 f
+806 5232(doutput_inmem)N
+1 f
+1486(in)X
+1582(the)X
+3 f
+1725(control-param)X
+1 f
+2346(menu)X
+2578(is)X
+2663(non-zero,)X
+3027(the)X
+3170(results)X
+3448(are)X
+3591(not)X
+3734(printed)X
+4030(on)X
+4142(the)X
+806 5328(console.)N
+1145(They)X
+1357(are)X
+1504(instead)X
+1803(stored)X
+2060(in)X
+2161(a)X
+2232(rotating)X
+2558(buffer)X
+2808(in)X
+2909(memory.)X
+3281(This)X
+3472(buffer)X
+3722(can)X
+3878(be)X
+3989(printed)X
+806 5424(by)N
+945(issuing)X
+1262(the)X
+1434(command)X
+3 f
+1843(int)X
+2014(print_debug)X
+1 f
+2523(.)X
+2619(The)X
+2813(variable)X
+3 f
+3167(doutput_rotate)X
+1 f
+3847(determines)X
+806 5520(whether)N
+1150(the)X
+1307(memory)X
+1645(buffer)X
+1905(rotates)X
+2201(when)X
+2438(\256lled:)X
+2682(if)X
+2771(non-zero)X
+3127(the)X
+3284(buffer)X
+3544(rotates,)X
+3862(if)X
+3951(zero)X
+4142(the)X
+806 5616(buffer)N
+1056(freezes)X
+1341(when)X
+1568(\256lled)X
+1780(and)X
+1946(does)X
+2136(not)X
+2283(accept)X
+2543(further)X
+2839(input.)X
+3111(The)X
+3281(buffer)X
+3532(is)X
+3622(initialized)X
+4023(with)X
+4218(a)X
+3 f
+806 5712('$')N
+1 f
+929(as)X
+1049(the)X
+1207(\256rst)X
+1398(character.)X
+1832(If)X
+1929(the)X
+2087(variable)X
+3 f
+2426(doutput_to\256le)X
+1 f
+3049(is)X
+3149(non-zero,)X
+3528(the)X
+3686(contents)X
+4037(of)X
+4142(the)X
+806 5808(buffer)N
+1056(are)X
+1204(also)X
+1378(printed)X
+1679(to)X
+1778(a)X
+1850(\256le)X
+1992(in)X
+2094(/tmp)X
+2292(when)X
+2520(the)X
+3 f
+2668(int)X
+2815(print_debug)X
+1 f
+3352(command)X
+3737(is)X
+3827(issued.)X
+4133(For)X
+
+6 p
+%%Page: 6 6
+10 s 10 xH 0 xS 1 f
+9 s
+2292 384(Chapter)N
+2585(2:)X
+2685(SPOT-)X
+2926(A)X
+2998(State)X
+3195(Process)X
+3465(Translator)X
+3841(for)X
+3953(REX)X
+10 s
+4218(6)X
+10 f
+806 424(h)N
+822(hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh)X
+1 f
+806 672(more)N
+1037(information)X
+1518(about)X
+1770(these)X
+2011(debugging)X
+2437(routines,)X
+2809(see)X
+2969(the)X
+3132(comments)X
+3550(in)X
+3667(the)X
+3830(source)X
+4111(\256les)X
+806 768("sys/rlib/dprintf.c")N
+1499(and)X
+1660("sys/rlib/dputs.c".)X
+3 f
+806 960(4.)N
+918(Example)X
+1 f
+1006 1084(An)N
+1135(example)X
+1466(of)X
+1555(a)X
+1621(multiple-chain)X
+2185(state)X
+2390(set)X
+2520(follows.)X
+7 f
+804 1324 -4.0000(/*)AN
+848 1420(*)N
+936 -4.0000(Rex)AX
+1112 -4.0000(ramp)AX
+1332 -4.0000(test)AX
+1552 -4.0000(paradigm.)AX
+848 1516(*)N
+848 1612 -4.0000(*/)AN
+804 1804 -4.0000(#include)AN
+1200 -4.0000("../hdr/ramp.h")AX
+804 1900 -4.0000(#include)AN
+1200 -4.0000("ldev_tst.h")AX
+804 1996 -4.0000(#include)AN
+1200 -4.0000("lcode_tst.h")AX
+804 2188 -4.0000(#define)AN
+1156 -4.0000(RAMP0)AX
+1686(0)X
+2039 -4.0000(/*)AX
+2171 -4.0000(ramps)AX
+2435 -4.0000(and)AX
+2611 -4.0000(windows)AX
+2963 -4.0000(used)AX
+3183 -4.0000(in)AX
+3315 -4.0000(paradigm)AX
+3711 -4.0000(*/)AX
+804 2284 -4.0000(#define)AN
+1156 -4.0000(RAMP1)AX
+1686(1)X
+804 2380 -4.0000(#define)AN
+1156 -4.0000(WIND0)AX
+1686(0)X
+804 2476 -4.0000(#define)AN
+1156 -4.0000(WIND1)AX
+1686(1)X
+804 2572 -4.0000(#define)AN
+1156 -4.0000(EYEALL)AX
+1686(\()X
+1774 -4.0000(\(WD0_XY)AX
+2126 -4.0000(<<)AX
+2258 -4.0000(\(WIND0)AX
+2566(*)X
+2654 -4.0000(2\)\))AX
+9 f
+2846(|)X
+7 f
+2918 -4.0000(\(WD0_XY)AX
+3270 -4.0000(<<)AX
+3402 -4.0000(\(WIND1)AX
+3710(*)X
+3798 -4.0000(2\)\))AX
+3974(\))X
+804 2668 -4.0000(#define)AN
+1156 -4.0000(EYEH_SIG)AX
+1684(0)X
+2039 -4.0000(/*)AX
+2171 -4.0000(signal)AX
+2479 -4.0000(numbers)AX
+2831 -4.0000(for)AX
+3007 -4.0000(eyes)AX
+3227 -4.0000(*/)AX
+804 2764 -4.0000(#define)AN
+1156 -4.0000(EYEV_SIG)AX
+1684(1)X
+804 2860 -4.0000(#define)AN
+1156 -4.0000(OEYEH_SIG)AX
+1684(2)X
+804 2956 -4.0000(#define)AN
+1156 -4.0000(OEYEV_SIG)AX
+1684(3)X
+804 3148 -4.0000(struct)AN
+1112 -4.0000(ra_list)AX
+1464({)X
+1157 3244 -4.0000(int)AN
+1510 -4.0000(len;)AX
+1157 3340 -4.0000(int)AN
+1510 -4.0000(ang;)AX
+1157 3436 -4.0000(int)AN
+1510 -4.0000(vel;)AX
+1157 3532 -4.0000(int)AN
+1510 -4.0000(xoff,)AX
+1774 -4.0000(yoff;)AX
+1157 3628 -4.0000(int)AN
+1510 -4.0000(xwind,)AX
+1818 -4.0000(ywind;)AX
+1157 3724 -4.0000(int)AN
+1510 -4.0000(oxwind,)AX
+1862 -4.0000(oywind;)AX
+1157 3820 -4.0000(int)AN
+1510 -4.0000(eyehoff,)AX
+1906 -4.0000(eyevoff,)AX
+2302 -4.0000(oeyehoff,)AX
+2742 -4.0000(oeyevoff;)AX
+1157 3916 -4.0000(int)AN
+1510 -4.0000(type;)AX
+1157 4012 -4.0000(int)AN
+1510 -4.0000(ecode;)AX
+804 4108 -4.0000(};)AN
+804 4300 -4.0000(#define)AN
+1156 -4.0000(E_D0)AX
+1510 -4.0000(2000)AX
+2216 -4.0000(/*)AX
+2348 -4.0000(ramp)AX
+2568 -4.0000(direction)AX
+3008 -4.0000(series)AX
+3316 -4.0000(*/)AX
+804 4396 -4.0000(#define)AN
+1156 -4.0000(E_D45)AX
+1510 -4.0000(2001)AX
+804 4492 -4.0000(#define)AN
+1156 -4.0000(E_D90)AX
+1510 -4.0000(2002)AX
+804 4588 -4.0000(#define)AN
+1156 -4.0000(E_D135)AX
+1510 -4.0000(2003)AX
+804 4684 -4.0000(#define)AN
+1156 -4.0000(E_D180)AX
+1510 -4.0000(2004)AX
+804 4780 -4.0000(#define)AN
+1156 -4.0000(E_D225)AX
+1510 -4.0000(2005)AX
+804 4876 -4.0000(#define)AN
+1156 -4.0000(E_D270)AX
+1510 -4.0000(2006)AX
+804 4972 -4.0000(#define)AN
+1156 -4.0000(E_D315)AX
+1510 -4.0000(2007)AX
+804 5164 -4.0000(/*)AN
+848 5260(*)N
+1157 -4.0000(Direction)AX
+1597 -4.0000(series)AX
+1905 -4.0000(for)AX
+2081 -4.0000(tracking.)AX
+848 5356 -4.0000(*/)AN
+804 5452 -4.0000(struct)AN
+1112 -4.0000(ra_list)AX
+1464 -4.0000(list0[])AX
+1816(=)X
+1904({)X
+804 5548 -4.0000(200,)AN
+1157 -4.0000(315,)AX
+1510 -4.0000(5,)AX
+1863 -4.0000(0,0,)AX
+2216 -4.0000(50,50,40,40,40,40,0,0,)AX
+3275 -4.0000(RA_CENPT,)AX
+3715 -4.0000(E_D315,)AX
+804 5644 -4.0000(200,)AN
+1157 -4.0000(90,)AX
+1510 -4.0000(10,)AX
+1863 -4.0000(0,0,)AX
+2216 -4.0000(50,50,40,40,20,20,0,0,)AX
+3275 -4.0000(RA_CENPT,)AX
+3715 -4.0000(E_D90,)AX
+804 5740 -4.0000(200,)AN
+1157 -4.0000(225,)AX
+1510 -4.0000(15,)AX
+1863 -4.0000(0,0,)AX
+2216 -4.0000(50,50,40,40,10,10,0,0,)AX
+3275 -4.0000(RA_CENPT,)AX
+3715 -4.0000(E_D225,)AX
+804 5836 -4.0000(200,)AN
+1157 -4.0000(0,)AX
+1510 -4.0000(20,)AX
+1863 -4.0000(0,0,)AX
+2216 -4.0000(50,50,40,40,30,30,0,0,)AX
+3275 -4.0000(RA_CENPT,)AX
+3715 -4.0000(E_D0,)AX
+
+7 p
+%%Page: 7 7
+10 s 10 xH 0 xS 7 f
+1 f
+9 s
+2100 384(Chapter)N
+2406(2:)X
+2532(SPOT-)X
+2786(A)X
+2871(State)X
+3081(Process)X
+3364(Translator)X
+3753(for)X
+3878(REX)X
+10 s
+4218(7)X
+10 f
+806 424(h)N
+822(hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh)X
+7 f
+804 672 -4.0000(200,)AN
+1157 -4.0000(180,)AX
+1510 -4.0000(25,)AX
+1863 -4.0000(0,0,)AX
+2216 -4.0000(50,50,40,40,40,40,0,0,)AX
+3275 -4.0000(RA_CENPT,)AX
+3715 -4.0000(E_D180,)AX
+804 768 -4.0000(200,)AN
+1157 -4.0000(45,)AX
+1510 -4.0000(30,)AX
+1863 -4.0000(0,0,)AX
+2216 -4.0000(50,50,40,40,20,20,0,0,)AX
+3275 -4.0000(RA_CENPT,)AX
+3715 -4.0000(E_D45,)AX
+804 864 -4.0000(200,)AN
+1157 -4.0000(270,)AX
+1510 -4.0000(35,)AX
+1863 -4.0000(0,0,)AX
+2216 -4.0000(50,50,40,40,10,10,0,0,)AX
+3275 -4.0000(RA_CENPT,)AX
+3715 -4.0000(E_D270,)AX
+804 960 -4.0000(200,)AN
+1157 -4.0000(135,)AX
+1510 -4.0000(40,)AX
+1863 -4.0000(0,0,)AX
+2216 -4.0000(50,50,40,40,30,30,0,0,)AX
+3275 -4.0000(RA_CENPT,)AX
+3715 -4.0000(E_D135,)AX
+804 1056 -4.0000(200,)AN
+1157 -4.0000(0,)AX
+1510 -4.0000(5,)AX
+1863 -4.0000(0,0,)AX
+2216 -4.0000(50,50,40,40,20,40,0,0,)AX
+3275 -4.0000(RA_CENPT,)AX
+3715 -4.0000(E_D0,)AX
+804 1152 -4.0000(200,)AN
+1157 -4.0000(315,)AX
+1510 -4.0000(10,)AX
+1863 -4.0000(0,0,)AX
+2216 -4.0000(50,50,40,40,0,0,40,40,)AX
+3275 -4.0000(RA_CENPT,)AX
+3715 -4.0000(E_D315,)AX
+804 1248 -4.0000(200,)AN
+1157 -4.0000(45,)AX
+1510 -4.0000(15,)AX
+1863 -4.0000(0,0,)AX
+2216 -4.0000(50,50,40,40,0,0,20,20,)AX
+3275 -4.0000(RA_CENPT,)AX
+3715 -4.0000(E_D45,)AX
+804 1344 -4.0000(200,)AN
+1157 -4.0000(225,)AX
+1510 -4.0000(20,)AX
+1863 -4.0000(0,0,)AX
+2216 -4.0000(50,50,40,40,0,0,10,10,)AX
+3275 -4.0000(RA_CENPT,)AX
+3715 -4.0000(E_D225,)AX
+804 1440 -4.0000(200,)AN
+1157 -4.0000(90,)AX
+1510 -4.0000(25,)AX
+1863 -4.0000(0,0,)AX
+2216 -4.0000(50,50,40,40,0,0,30,30,)AX
+3275 -4.0000(RA_CENPT,)AX
+3715 -4.0000(E_D90,)AX
+804 1536 -4.0000(200,)AN
+1157 -4.0000(180,)AX
+1510 -4.0000(30,)AX
+1863 -4.0000(0,0,)AX
+2216 -4.0000(50,50,40,40,0,0,40,40,)AX
+3275 -4.0000(RA_CENPT,)AX
+3715 -4.0000(E_D180,)AX
+804 1632 -4.0000(200,)AN
+1157 -4.0000(135,)AX
+1510 -4.0000(35,)AX
+1863 -4.0000(0,0,)AX
+2216 -4.0000(50,50,40,40,0,0,20,20,)AX
+3275 -4.0000(RA_CENPT,)AX
+3715 -4.0000(E_D135,)AX
+804 1728 -4.0000(200,)AN
+1157 -4.0000(270,)AX
+1510 -4.0000(40,)AX
+1863 -4.0000(0,0,)AX
+2216 -4.0000(50,50,40,40,0,0,10,10,)AX
+3275 -4.0000(RA_CENPT,)AX
+3715 -4.0000(E_D270,)AX
+804 1824 -4.0000(-1,)AN
+1157 -4.0000(-1,)AX
+1510 -4.0000(-1,)AX
+1863 -4.0000(-1,-1,)AX
+2216 -4.0000(-1,-1,-1,-1,-1,-1,-1,-1,)AX
+3316 -4.0000(0,)AX
+3628 -4.0000(-1,)AX
+804 1920 -4.0000(};)AN
+804 2112 -4.0000(static)AN
+1112 -4.0000(struct)AX
+1420 -4.0000(ra_list)AX
+1772 -4.0000(*rlp=)AX
+2036 -4.0000(&list0[0];)AX
+804 2208 -4.0000(static)AN
+1112 -4.0000(int)AX
+1288 -4.0000(rxwind=)AX
+1640 -4.0000(0,)AX
+1772 -4.0000(rywind=)AX
+2124 -4.0000(0;)AX
+804 2304 -4.0000(static)AN
+1112 -4.0000(int)AX
+1288 -4.0000(roxwind=)AX
+1684 -4.0000(0,)AX
+1816 -4.0000(roywind=)AX
+2212 -4.0000(0;)AX
+804 2400 -4.0000(int)AN
+980 -4.0000(fxwd=)AX
+1244 -4.0000(100,)AX
+1464 -4.0000(fywd=)AX
+1728 -4.0000(100;)AX
+804 2496 -4.0000(int)AN
+980 -4.0000(foxwd=)AX
+1288 -4.0000(50,)AX
+1464 -4.0000(foywd=)AX
+1772 -4.0000(50;)AX
+804 2592 -4.0000(static)AN
+1112 -4.0000(int)AX
+1288 -4.0000(do_two_ramps=)AX
+1904 -4.0000(1;)AX
+804 2688 -4.0000(static)AN
+1112 -4.0000(int)AX
+1288 -4.0000(r0_xda=)AX
+1640 -4.0000(0,)AX
+1772 -4.0000(r0_yda=)AX
+2124 -4.0000(1,)AX
+2256 -4.0000(r1_xda=)AX
+2608 -4.0000(2,)AX
+2740 -4.0000(r1_yda=)AX
+3092 -4.0000(3;)AX
+804 2784 -4.0000(static)AN
+1112 -4.0000(int)AX
+1288 -4.0000(clear_all=)AX
+1772 -4.0000(0;)AX
+804 2880 -4.0000(static)AN
+1112 -4.0000(int)AX
+1288 -4.0000(tst_single=)AX
+ -4.0000(0;)AS
+1948 -4.0000(single_step=)AX
+2520 -4.0000(0;)AX
+804 2976 -4.0000(static)AN
+1112 -4.0000(RL)AX
+1244 -4.0000(rl_sav;)AX
+804 3168 -4.0000(int)AN
+804 3264 -4.0000(nextramp\(long)AN
+1420 -4.0000(flag\))AX
+804 3360({)N
+1157 3456 -4.0000(if\(flag)AN
+9 f
+1525(|)X
+1569(|)X
+7 f
+1641 -4.0000(\(rlp->len)AX
+2081 -4.0000(==)AX
+2213 -4.0000(-1\))AX
+2389(\))X
+2477 -4.0000(rlp=)AX
+2697 -4.0000(&list0[0];)AX
+1157 3552 -4.0000(ra_new\(RAMP0,)AN
+1773 -4.0000(rlp->len,)AX
+2213 -4.0000(rlp->ang,)AX
+2653 -4.0000(rlp->vel,)AX
+3093 -4.0000(rlp->xoff,)AX
+3577 -4.0000(rlp->yoff,)AX
+1863 3648 -4.0000(rlp->ecode,)AN
+ -4.0000(rlp->type\);)AS
+1157 3744 -4.0000(if\(do_two_ramps\))AN
+1333 3840 -4.0000(ra_new\(RAMP1,)AN
+1949 -4.0000(rlp->len,)AX
+2389 -4.0000(\(\(rlp->ang)AX
+2873(+)X
+2961 -4.0000(180\))AX
+3181(%)X
+3269 -4.0000(360\),)AX
+1642 3936 -4.0000(rlp->vel,)AN
+2082 -4.0000(rlp->xoff,)AX
+2566 -4.0000(rlp->yoff,)AX
+3050 -4.0000(rlp->ecode,)AX
+ -4.0000(rlp->type\);)AS
+1157 4032 -4.0000(rxwind=)AN
+1509 -4.0000(rlp->xwind;)AX
+1157 4128 -4.0000(rywind=)AN
+1509 -4.0000(rlp->ywind;)AX
+1157 4224 -4.0000(roxwind=)AN
+1553 -4.0000(rlp->oxwind;)AX
+1157 4320 -4.0000(roywind=)AN
+1553 -4.0000(rlp->oywind;)AX
+1157 4416 -4.0000(rlp++;)AN
+1157 4512 -4.0000(off_eye\(rlp->eyehoff,)AN
+2125 -4.0000(rlp->eyevoff\);)AX
+1157 4608 -4.0000(off_oeye\(rlp->oeyehoff,)AN
+2213 -4.0000(rlp->oeyevoff\);)AX
+1157 4704 -4.0000(return\(0\);)AN
+804 4800(})N
+804 4992 -4.0000(int)AN
+804 5088 -4.0000(rampstart\(long)AN
+1464 -4.0000(LED\))AX
+804 5184({)N
+1157 5280 -4.0000(ra_start\(RAMP0,)AN
+1861 -4.0000(1,)AX
+1993 -4.0000(LED\);)AX
+1157 5376 -4.0000(if\(do_two_ramps\))AN
+1905 -4.0000(ra_start\(RAMP1,)AX
+2609 -4.0000(1,)AX
+2741 -4.0000(LED\);)AX
+1157 5472 -4.0000(return\(0\);)AN
+804 5568(})N
+804 5760 -4.0000(int)AN
+
+8 p
+%%Page: 8 8
+10 s 10 xH 0 xS 7 f
+1 f
+9 s
+2100 384(Chapter)N
+2406(2:)X
+2532(SPOT-)X
+2786(A)X
+2871(State)X
+3081(Process)X
+3364(Translator)X
+3753(for)X
+3878(REX)X
+10 s
+4218(8)X
+10 f
+806 424(h)N
+822(hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh)X
+7 f
+804 672 -4.0000(rampstop\(void\))AN
+804 768({)N
+1157 864 -4.0000(ra_stop\(RAMP0\);)AN
+1157 960 -4.0000(if\(do_two_ramps\))AN
+1905 -4.0000(ra_stop\(RAMP1\);)AX
+1157 1056 -4.0000(clear_all_da\(\);)AN
+1157 1152 -4.0000(return\(0\);)AN
+804 1248(})N
+804 1440 -4.0000(int)AN
+804 1536 -4.0000(ramptset\(long)AN
+1420 -4.0000(rnum,)AX
+1684 -4.0000(long)AX
+1904 -4.0000(preset,)AX
+2256 -4.0000(long)AX
+2476 -4.0000(rand\))AX
+804 1632({)N
+1157 1728 -4.0000(RA_RAMP_TIME)AN
+1729 -4.0000(ra_time;)AX
+1157 1824 -4.0000(extern)AN
+1465 -4.0000(STATE)AX
+1729 -4.0000(stimeramp;)AX
+1157 2016 -4.0000(ra_time=)AN
+1553 -4.0000(ra_compute_time\(rnum,)AX
+2521 -4.0000(preset,)AX
+2873 -4.0000(rand\);)AX
+1157 2112 -4.0000(if\(ra_time.ra_ramp_time_preset)AN
+2521 -4.0000(!=)AX
+2653 -4.0000(-1\))AX
+2829({)X
+1510 2208 -4.0000(stimeramp.preset=)AN
+2302 -4.0000(ra_time.ra_ramp_time_preset;)AX
+1510 2304 -4.0000(stimeramp.random=)AN
+2302 -4.0000(ra_time.ra_ramp_time_random;)AX
+1510 2400 -4.0000(ramp[rnum].ra_rampflag)AN
+9 f
+2538(|)X
+7 f
+2566(=)X
+2654 -4.0000(RA_TIMESTART;)AX
+1157 2496(})N
+1157 2592 -4.0000(return\(0\);)AN
+804 2688(})N
+804 2880 -4.0000(int)AN
+804 2976 -4.0000(set_wsiz\(long)AN
+1420 -4.0000(flag\))AX
+804 3072({)N
+1157 3168 -4.0000(if\(flag\))AN
+1553({)X
+1510 3264 -4.0000(wd_siz\(WIND0,)AN
+2126 -4.0000(rxwind,)AX
+2478 -4.0000(rywind\);)AX
+1510 3360 -4.0000(wd_siz\(WIND1,)AN
+2126 -4.0000(roxwind,)AX
+2522 -4.0000(roywind\);)AX
+1157 3456(})N
+1245 -4.0000(else)AX
+1465({)X
+1510 3552 -4.0000(wd_siz\(WIND0,)AN
+2126 -4.0000(fxwd,)AX
+2390 -4.0000(fywd\);)AX
+1510 3648 -4.0000(wd_siz\(WIND1,)AN
+2126 -4.0000(foxwd,)AX
+2434 -4.0000(foywd\);)AX
+1157 3744(})N
+1157 3840 -4.0000(return\(0\);)AN
+804 3936(})N
+804 4128 -4.0000(void)AN
+804 4224 -4.0000(rinitf\(void\))AN
+804 4320({)N
+980 4512 -4.0000(/*)AN
+1024 4608(*)N
+1112 -4.0000(Initializations.)AX
+1024 4704 -4.0000(*/)AN
+980 4800 -4.0000(da_cntrl_2\(r0_xda,)AN
+1816 -4.0000(DA_RAMP_X,)AX
+2300 -4.0000(RAMP0,)AX
+1465 4896 -4.0000(r0_yda,)AN
+1817 -4.0000(DA_RAMP_Y,)AX
+2301 -4.0000(RAMP0\);)AX
+3098 -4.0000(/*)AX
+3230 -4.0000(first)AX
+3494 -4.0000(ramp)AX
+3714 -4.0000(*/)AX
+980 4992 -4.0000(da_cntrl_2\(r1_xda,)AN
+1816 -4.0000(DA_RAMP_X,)AX
+2300 -4.0000(RAMP1,)AX
+1465 5088 -4.0000(r1_yda,)AN
+1817 -4.0000(DA_RAMP_Y,)AX
+2301 -4.0000(RAMP1\);)AX
+3098 -4.0000(/*)AX
+3230 -4.0000(second)AX
+3538 -4.0000(ramp)AX
+3758 -4.0000(*/)AX
+980 5184 -4.0000(da_cursor\(r0_xda,)AN
+1772 -4.0000(r0_yda,)AX
+2124 -4.0000(CU_DA_DIAMOND\);)AX
+3098 -4.0000(/*)AX
+3230 -4.0000(da)AX
+3362 -4.0000(cursors)AX
+3714 -4.0000(*/)AX
+980 5280 -4.0000(da_cursor\(r1_xda,)AN
+1772 -4.0000(r1_yda,)AX
+2124 -4.0000(CU_DA_PLUS\);)AX
+980 5376 -4.0000(clear_all_da\(\);)AN
+980 5472 -4.0000(wd_disp\(D_W_ALLCUR)AN
+1816(&)X
+1904 -4.0000(\304D_W_JOY\);)AX
+2745 -4.0000(/*)AX
+2877 -4.0000(all)AX
+3053 -4.0000(cursors)AX
+3405 -4.0000(but)AX
+3581 -4.0000(joystick)AX
+3977 -4.0000(*/)AX
+980 5568 -4.0000(wd_cursor\(WIND0,)AN
+1728 -4.0000(CU_WIND_8\);)AX
+2745 -4.0000(/*)AX
+2877 -4.0000(set)AX
+3053 -4.0000(window)AX
+3361 -4.0000(cursors)AX
+3713 -4.0000(*/)AX
+980 5664 -4.0000(wd_cursor\(WIND1,)AN
+1728 -4.0000(CU_WIND_12\);)AX
+980 5760 -4.0000(wd_src_pos\(WIND0,)AN
+1772 -4.0000(WD_DA,)AX
+2080 -4.0000(r0_xda,)AX
+2432 -4.0000(WD_DA,)AX
+2740 -4.0000(r0_yda\);)AX
+
+9 p
+%%Page: 9 9
+10 s 10 xH 0 xS 7 f
+1 f
+9 s
+2100 384(Chapter)N
+2406(2:)X
+2532(SPOT-)X
+2786(A)X
+2871(State)X
+3081(Process)X
+3364(Translator)X
+3753(for)X
+3878(REX)X
+10 s
+4218(9)X
+10 f
+806 424(h)N
+822(hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh)X
+7 f
+980 672 -4.0000(wd_src_pos\(WIND1,)AN
+1772 -4.0000(WD_DA,)AX
+2080 -4.0000(r1_xda,)AX
+2432 -4.0000(WD_DA,)AX
+2740 -4.0000(r1_yda\);)AX
+980 768 -4.0000(wd_src_check\(WIND0,)AN
+1860 -4.0000(WD_SIGNAL,)AX
+2344 -4.0000(EYEH_SIG,)AX
+2784 -4.0000(WD_SIGNAL,)AX
+3268 -4.0000(EYEV_SIG\);)AX
+980 864 -4.0000(wd_src_check\(WIND1,)AN
+1860 -4.0000(WD_SIGNAL,)AX
+2344 -4.0000(OEYEH_SIG,)AX
+2828 -4.0000(WD_SIGNAL,)AX
+3312 -4.0000(OEYEV_SIG\);)AX
+980 960 -4.0000(wd_siz\(WIND0,)AN
+1596 -4.0000(fxwd,)AX
+1860 -4.0000(fywd\);)AX
+980 1056 -4.0000(wd_siz\(WIND1,)AN
+1596 -4.0000(foxwd,)AX
+1904 -4.0000(foywd\);)AX
+980 1152 -4.0000(wd_pos\(WIND0,)AN
+1596 -4.0000(0,)AX
+1728 -4.0000(0\);)AX
+980 1248 -4.0000(wd_pos\(WIND1,)AN
+1596 -4.0000(0,)AX
+1728 -4.0000(0\);)AX
+980 1344 -4.0000(wd_cntrl\(WIND0,)AN
+1684 -4.0000(WD_ON\);)AX
+980 1440 -4.0000(wd_cntrl\(WIND1,)AN
+1684 -4.0000(WD_ON\);)AX
+980 1536 -4.0000(rlp=)AN
+1200 -4.0000(&list0[0];)AX
+980 1632 -4.0000(wd_test\(1\);)AN
+2569 -4.0000(/*)AX
+2701 -4.0000(put)AX
+2877 -4.0000(windows)AX
+3229 -4.0000(in)AX
+3361 -4.0000(test)AX
+3581 -4.0000(mode)AX
+3801 -4.0000(*/)AX
+980 1728 -4.0000(ustatus\("REX)AN
+1552 -4.0000(test)AX
+1772 -4.0000(paradigm"\);)AX
+804 1824(})N
+804 2016 -4.0000(int)AN
+804 2112 -4.0000(clear_all_da\(void\))AN
+804 2208({)N
+980 2304 -4.0000(da_set_2\(r0_xda,)AN
+1728 -4.0000(0,)AX
+1860 -4.0000(r0_yda,)AX
+2212 -4.0000(0\);)AX
+980 2400 -4.0000(da_set_2\(r1_xda,)AN
+1728 -4.0000(0,)AX
+1860 -4.0000(r1_yda,)AX
+2212 -4.0000(0\);)AX
+980 2496 -4.0000(return\(0\);)AN
+804 2592(})N
+804 2784 -4.0000(int)AN
+980 -4.0000(marknum=)AX
+1376 -4.0000(1;)AX
+804 2880 -4.0000(int)AN
+804 2976 -4.0000(newmark\(\))AN
+804 3072({)N
+1157 3168 -4.0000(RL_CHAN)AN
+1509 -4.0000(*rcp;)AX
+1157 3360 -4.0000(if\(marknum)AN
+1641(>)X
+1729 -4.0000(4\))AX
+1861 -4.0000(marknum=)AX
+2257 -4.0000(1;)AX
+1157 3456 -4.0000(sd_mark\(marknum-1,)AN
+1993 -4.0000(marknum\);)AX
+1157 3552 -4.0000(marknum++;)AN
+1157 3744 -4.0000(if\(tst_single\))AN
+1817({)X
+1245 3936 -4.0000(switch\(single_step++\))AN
+2213({)X
+1245 4032 -4.0000(case)AN
+1465 -4.0000(0:)AX
+1333 4128 -4.0000(for\(rcp=)AN
+1729 -4.0000(&rl.rl_chan[0];)AX
+2433 -4.0000(rcp)AX
+2609(<)X
+2697 -4.0000(&rl.rl_chan[4];)AX
+3401 -4.0000(rcp++\))AX
+1510 4224 -4.0000(rcp->rl_erase=)AN
+2170 -4.0000(1;)AX
+1333 4320 -4.0000(rl.rl_start_x=)AN
+1993 -4.0000(40;)AX
+1333 4416 -4.0000(rl.rl_length=)AN
+1949 -4.0000(260;)AX
+1333 4512 -4.0000(rl.rl_rate=)AN
+ -4.0000(2;)AS
+1333 4608 -4.0000(rl_trig\(\);)AN
+1333 4704 -4.0000(break;)AN
+1245 4800 -4.0000(case)AN
+1465 -4.0000(1:)AX
+1333 4896 -4.0000(for\(rcp=)AN
+1729 -4.0000(&rl.rl_chan[0];)AX
+2433 -4.0000(rcp)AX
+2609(<)X
+2697 -4.0000(&rl.rl_chan[4];)AX
+3401 -4.0000(rcp++\))AX
+1510 4992 -4.0000(rcp->rl_erase=)AN
+2170 -4.0000(0;)AX
+1333 5088 -4.0000(rl.rl_start_x=)AN
+1993 -4.0000(310;)AX
+1333 5184 -4.0000(rl.rl_length=)AN
+1949 -4.0000(260;)AX
+1333 5280 -4.0000(rl.rl_rate=)AN
+ -4.0000(1;)AS
+1333 5376 -4.0000(rl_trig\(\);)AN
+1333 5472 -4.0000(single_step=)AN
+1905 -4.0000(0;)AX
+1333 5568 -4.0000(break;)AN
+1245 5664(})N
+1157 5760(})N
+
+10 p
+%%Page: 10 10
+10 s 10 xH 0 xS 7 f
+1 f
+9 s
+2056 384(Chapter)N
+2362(2:)X
+2488(SPOT-)X
+2742(A)X
+2827(State)X
+3037(Process)X
+3320(Translator)X
+3709(for)X
+3834(REX)X
+10 s
+4174(10)X
+10 f
+806 424(h)N
+822(hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh)X
+7 f
+1157 672 -4.0000(return\(0\);)AN
+804 768(})N
+804 960 -4.0000(static)AN
+1112 -4.0000(int)AX
+1288 -4.0000(tst_user=)AX
+1728 -4.0000(0;)AX
+804 1056 -4.0000(static)AN
+1112 -4.0000(int)AX
+1288 -4.0000(strcount=)AX
+1728 -4.0000(0;)AX
+804 1152 -4.0000(int)AN
+804 1248 -4.0000(newstring\(\))AN
+804 1344({)N
+1157 1440 -4.0000(if\(!tst_user\))AN
+1773 -4.0000(return\(0\);)AX
+1157 1536 -4.0000(if\(strcount)AN
+ -4.0000(==)AS
+1817 -4.0000(0\))AX
+1949({)X
+1510 1632 -4.0000(ustatus\("Change)AN
+2214 -4.0000(1"\);)AX
+1510 1728 -4.0000(strcount=)AN
+1950 -4.0000(1;)AX
+1157 1824(})N
+1245 -4.0000(else)AX
+1465({)X
+1510 1920 -4.0000(ustatus\("Back)AN
+2126 -4.0000(to)AX
+2258 -4.0000(test..."\);)AX
+1510 2016 -4.0000(strcount=)AN
+1950 -4.0000(0;)AX
+1157 2112(})N
+1157 2208 -4.0000(return\(0\);)AN
+804 2304(})N
+804 2496 -4.0000(#pragma)AN
+1156 -4.0000(off)AX
+1332 -4.0000(\(unreferenced\))AX
+804 2592 -4.0000(int)AN
+804 2688 -4.0000(do_clear_vaf\(int)AN
+1552 -4.0000(flag,)AX
+1816 -4.0000(MENU)AX
+2036 -4.0000(*mp,)AX
+2256 -4.0000(char)AX
+2476 -4.0000(*astr,)AX
+2784 -4.0000(VLIST)AX
+3048 -4.0000(*vlp,)AX
+3312 -4.0000(int)AX
+3488 -4.0000(*tvadd\))AX
+804 2784({)N
+804 2880 -4.0000(#pragma)AN
+1156 -4.0000(on)AX
+1288 -4.0000(\(unreferenced\))AX
+1157 2976 -4.0000(clear_all_da\(\);)AN
+1157 3072 -4.0000(return\(0\);)AN
+804 3168(})N
+804 3360 -4.0000(static)AN
+1112 -4.0000(int)AX
+1288 -4.0000(rl_valid=)AX
+1728 -4.0000(0;)AX
+804 3456 -4.0000(#pragma)AN
+1156 -4.0000(off)AX
+1332 -4.0000(\(unreferenced\))AX
+804 3552 -4.0000(int)AN
+804 3648 -4.0000(setup_single_vaf\(int)AN
+1728 -4.0000(flag,)AX
+1992 -4.0000(MENU)AX
+2212 -4.0000(*mp,)AX
+2432 -4.0000(char)AX
+2652 -4.0000(*astr,)AX
+2960 -4.0000(VLIST)AX
+3224 -4.0000(*vlp,)AX
+3488 -4.0000(int)AX
+3664 -4.0000(*tvadd\))AX
+804 3744({)N
+804 3840 -4.0000(#pragma)AN
+1156 -4.0000(on)AX
+1288 -4.0000(\(unreferenced\))AX
+980 4032 -4.0000(if\(tst_single\))AN
+1640({)X
+1157 4224 -4.0000(/*)AN
+1201 4320(*)N
+1289 -4.0000(Setup)AX
+1553 -4.0000(single)AX
+1861 -4.0000(trace)AX
+2125 -4.0000(mode.)AX
+2433 -4.0000(Save)AX
+2653 -4.0000(current)AX
+3005 -4.0000(rl)AX
+3137 -4.0000(struct.)AX
+1201 4416 -4.0000(*/)AN
+1157 4512 -4.0000(rl_sav=)AN
+1509 -4.0000(rl;)AX
+1157 4608 -4.0000(rl_valid=)AN
+1597 -4.0000(1;)AX
+1157 4704 -4.0000(i_b->d_flags)AN
+9 f
+1745(|)X
+7 f
+1773(=)X
+1861 -4.0000(D_RL_SINGLE;)AX
+1157 4800 -4.0000(rl_erase\(\);)AN
+1157 4896 -4.0000(single_step=)AN
+1729 -4.0000(0;)AX
+980 4992(})N
+1068 -4.0000(else)AX
+1288({)X
+1157 5184 -4.0000(/*)AN
+1201 5280(*)N
+1289 -4.0000(Return)AX
+1597 -4.0000(to)AX
+1729 -4.0000(continuous)AX
+2213 -4.0000(mode.)AX
+1201 5376 -4.0000(*/)AN
+1157 5472 -4.0000(if\(rl_valid\))AN
+1729 -4.0000(rl=)AX
+1905 -4.0000(rl_sav;)AX
+1157 5568 -4.0000(i_b->d_flags)AN
+1729 -4.0000(&=)AX
+1861 -4.0000(\304D_RL_SINGLE;)AX
+1157 5664 -4.0000(rl_erase\(\);)AN
+980 5760(})N
+
+11 p
+%%Page: 11 11
+10 s 10 xH 0 xS 7 f
+1 f
+9 s
+2056 384(Chapter)N
+2362(2:)X
+2488(SPOT-)X
+2742(A)X
+2827(State)X
+3037(Process)X
+3320(Translator)X
+3709(for)X
+3834(REX)X
+10 s
+4174(11)X
+10 f
+806 424(h)N
+822(hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh)X
+7 f
+980 672 -4.0000(return\(0\);)AN
+804 768(})N
+804 960 -4.0000(/*)AN
+848 1056(*)N
+936 -4.0000(Declaration)AX
+ -4.0000(of)AS
+1596 -4.0000(statelist)AX
+2036 -4.0000(menu.)AX
+848 1152 -4.0000(*/)AN
+804 1248 -4.0000(VLIST)AN
+1068 -4.0000(state_vl[])AX
+1552(=)X
+1640({)X
+804 1344 -4.0000("clear_all_da",)AN
+1863 -4.0000(&clear_all,)AX
+ -4.0000(NP,)AS
+2567 -4.0000(do_clear_vaf,)AX
+3183 -4.0000(ME_AFT,)AX
+3535 -4.0000(ME_DEC,)AX
+804 1440 -4.0000("do_two_ramps",)AN
+1863 -4.0000(&do_two_ramps,)AX
+2523 -4.0000(NP,)AX
+2699 -4.0000(NP,)AX
+2875 -4.0000(0,)AX
+3007 -4.0000(ME_DEC,)AX
+804 1536 -4.0000("ramp0_xda",)AN
+1863 -4.0000(&r0_xda,)AX
+2259 -4.0000(NP,)AX
+2435 -4.0000(NP,)AX
+2611 -4.0000(0,)AX
+2743 -4.0000(ME_DEC,)AX
+804 1632 -4.0000("ramp0_yda",)AN
+1863 -4.0000(&r0_yda,)AX
+2259 -4.0000(NP,)AX
+2435 -4.0000(NP,)AX
+2611 -4.0000(0,)AX
+2743 -4.0000(ME_DEC,)AX
+804 1728 -4.0000("ramp1_xda",)AN
+1863 -4.0000(&r1_xda,)AX
+2259 -4.0000(NP,)AX
+2435 -4.0000(NP,)AX
+2611 -4.0000(0,)AX
+2743 -4.0000(ME_DEC,)AX
+804 1824 -4.0000("ramp1_yda",)AN
+1863 -4.0000(&r1_yda,)AX
+2259 -4.0000(NP,)AX
+2435 -4.0000(NP,)AX
+2611 -4.0000(0,)AX
+2743 -4.0000(ME_DEC,)AX
+804 1920 -4.0000("fix_xwind",)AN
+1863 -4.0000(&fxwd,)AX
+2171 -4.0000(NP,)AX
+2347 -4.0000(NP,)AX
+2523 -4.0000(0,)AX
+2655 -4.0000(ME_DEC,)AX
+804 2016 -4.0000("fix_ywind",)AN
+1863 -4.0000(&fywd,)AX
+2171 -4.0000(NP,)AX
+2347 -4.0000(NP,)AX
+2523 -4.0000(0,)AX
+2655 -4.0000(ME_DEC,)AX
+804 2112 -4.0000("fix_oxwind",)AN
+1863 -4.0000(&foxwd,)AX
+2215 -4.0000(NP,)AX
+2391 -4.0000(NP,)AX
+2567 -4.0000(0,)AX
+2699 -4.0000(ME_DEC,)AX
+804 2208 -4.0000("fix_oywind",)AN
+1863 -4.0000(&foywd,)AX
+2215 -4.0000(NP,)AX
+2391 -4.0000(NP,)AX
+2567 -4.0000(0,)AX
+2699 -4.0000(ME_DEC,)AX
+804 2304 -4.0000("test_user_msg",)AN
+1863 -4.0000(&tst_user,)AX
+2347 -4.0000(NP,)AX
+2523 -4.0000(NP,)AX
+2699 -4.0000(0,)AX
+2831 -4.0000(ME_DEC,)AX
+804 2400 -4.0000("test_single_trace",)AN
+1863 -4.0000(&tst_single,)AX
+2435 -4.0000(NP,)AX
+2611 -4.0000(setup_single_vaf,)AX
+3403 -4.0000(ME_AFT,)AX
+3755 -4.0000(ME_DEC,)AX
+804 2496 -4.0000(NS,)AN
+804 2592 -4.0000(};)AN
+804 2784 -4.0000(char)AN
+1024 -4.0000(hm_sv_vl[]=)AX
+ -4.0000("do_two_ramps-)AS
+2212 -4.0000(0:)AX
+2344 -4.0000(one)AX
+2520 -4.0000(ramp)AX
+2740 -4.0000(active)AX
+3048 -4.0000(1:)AX
+3180 -4.0000(two)AX
+3356 -4.0000(ramps)AX
+3620 -4.0000(active";)AX
+804 2976 -4.0000(/*)AN
+848 3072(*)N
+936 -4.0000(User-supplied)AX
+1552 -4.0000(menu)AX
+1772 -4.0000(table.)AX
+848 3168 -4.0000(*/)AN
+804 3264 -4.0000(MENU)AN
+1024 -4.0000(umenus[])AX
+1420(=)X
+1508({)X
+804 3360 -4.0000("state_vars",)AN
+1863 -4.0000(&state_vl,)AX
+2347 -4.0000(NP,)AX
+2523 -4.0000(NP,)AX
+2699 -4.0000(0,)AX
+2831 -4.0000(NP,)AX
+3007 -4.0000(hm_sv_vl,)AX
+804 3456 -4.0000(NS,)AN
+804 3552 -4.0000(};)AN
+804 3744 -4.0000(/*)AN
+848 3840(*)N
+936 -4.0000(User-supplied)AX
+1552 -4.0000(noun)AX
+1772 -4.0000(table.)AX
+848 3936 -4.0000(*/)AN
+804 4032 -4.0000(NOUN)AN
+1024 -4.0000(unouns[])AX
+1420(=)X
+1508({)X
+804 4128 -4.0000("",)AN
+804 4224 -4.0000(};)AN
+804 4416 -4.0000(%%)AN
+804 4608 -4.0000(id)AN
+936 -4.0000(700)AX
+804 4704 -4.0000(restart)AN
+1156 -4.0000(rinitf)AX
+804 4800 -4.0000(main_set)AN
+1200({)X
+804 4896 -4.0000(status)AN
+1112 -4.0000(ON)AX
+804 4992 -4.0000(begin)AN
+1157 -4.0000(first:)AX
+1510 5088 -4.0000(code)AN
+1730 -4.0000(STARTCD)AX
+1510 5184 -4.0000(time)AN
+1730 -4.0000(1500)AX
+1510 5280 -4.0000(to)AN
+1642 -4.0000(pause1)AX
+1157 5376 -4.0000(pause1:)AN
+1510 5472 -4.0000(to)AN
+1642 -4.0000(pause2)AX
+1950 -4.0000(on)AX
+2082 -4.0000(+PSTOP)AX
+2390(&)X
+2478 -4.0000(softswitch)AX
+1510 5568 -4.0000(to)AN
+1642 -4.0000(go)AX
+1774 -4.0000(on)AX
+1906 -4.0000(-PSTOP)AX
+2214(&)X
+2302 -4.0000(softswitch)AX
+1157 5664 -4.0000(pause2:)AN
+1510 5760 -4.0000(code)AN
+1730 -4.0000(PAUSECD)AX
+
+12 p
+%%Page: 12 12
+10 s 10 xH 0 xS 7 f
+1 f
+9 s
+2056 384(Chapter)N
+2362(2:)X
+2488(SPOT-)X
+2742(A)X
+2827(State)X
+3037(Process)X
+3320(Translator)X
+3709(for)X
+3834(REX)X
+10 s
+4174(12)X
+10 f
+806 424(h)N
+822(hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh)X
+7 f
+1510 672 -4.0000(to)AN
+1642 -4.0000(go)AX
+1774 -4.0000(on)AX
+1906 -4.0000(-PSTOP)AX
+2214(&)X
+2302 -4.0000(softswitch)AX
+1157 768 -4.0000(go:)AN
+1510 864 -4.0000(code)AN
+1730 -4.0000(ENABLECD)AX
+1510 960 -4.0000(rl)AN
+1642(0)X
+1510 1056 -4.0000(to)AN
+1642 -4.0000(selramp)AX
+1157 1152 -4.0000(selramp:)AN
+1510 1248 -4.0000(do)AN
+1642 -4.0000(nextramp\(0\))AX
+2569 -4.0000(/*)AX
+2701 -4.0000(select)AX
+3009 -4.0000(next)AX
+3229 -4.0000(ramp)AX
+3449 -4.0000(*/)AX
+1510 1344 -4.0000(to)AN
+1642 -4.0000(stramp)AX
+1157 1440 -4.0000(stramp:)AN
+1510 1632 -4.0000(/*)AN
+1554 1728(*)N
+1642 -4.0000(Start)AX
+1906 -4.0000(the)AX
+2082 -4.0000(next)AX
+2302 -4.0000(ramp.)AX
+2610 -4.0000(Pass)AX
+2830 -4.0000(name)AX
+3050 -4.0000(of)AX
+3182 -4.0000(device)AX
+3490 -4.0000(on)AX
+3622 -4.0000(mirror)AX
+1554 1824(*)N
+1642 -4.0000(so)AX
+1774 -4.0000(that)AX
+1994 -4.0000(it)AX
+2126 -4.0000(can)AX
+2302 -4.0000(be)AX
+2434 -4.0000(turned)AX
+2742 -4.0000(off)AX
+2918 -4.0000(at)AX
+3050 -4.0000(end)AX
+3226 -4.0000(of)AX
+3358 -4.0000(ramp)AX
+3578 -4.0000(\(if)AX
+3754 -4.0000(it)AX
+1554 1920(*)N
+1642 -4.0000(has)AX
+1818 -4.0000(not)AX
+1994 -4.0000(already)AX
+2346 -4.0000(been)AX
+2566 -4.0000(turned)AX
+2874 -4.0000(off)AX
+3050 -4.0000(explicity)AX
+3490 -4.0000(by)AX
+3622 -4.0000(an)AX
+3754 -4.0000(action.)AX
+1554 2016 -4.0000(*/)AN
+1510 2112 -4.0000(do)AN
+1642 -4.0000(rampstart\(LED1\))AX
+1510 2208 -4.0000(rl)AN
+1642 -4.0000(+15)AX
+1510 2304 -4.0000(to)AN
+1642 -4.0000(openw)AX
+1157 2400 -4.0000(openw:)AN
+1510 2496 -4.0000(do)AN
+1642 -4.0000(awind\(OPEN_W\))AX
+1510 2592 -4.0000(to)AN
+1642 -4.0000(fpon)AX
+1862 -4.0000(on)AX
+1994 -4.0000(+RA_STARTED)AX
+(&)S
+2610 -4.0000(ramp[RAMP0].ra_rampflag)AX
+1157 2688 -4.0000(fpon:)AN
+1510 2784 -4.0000(code)AN
+1730 -4.0000(FPONCD)AX
+1510 2880 -4.0000(do)AN
+1642 -4.0000(dio_on\(LED1\))AX
+1510 2976 -4.0000(rl)AN
+1642 -4.0000(-10)AX
+1510 3072 -4.0000(time)AN
+1730 -4.0000(250)AX
+1510 3168 -4.0000(to)AN
+1642 -4.0000(eyeon)AX
+1157 3264 -4.0000(eyeon:)AN
+1510 3360 -4.0000(time)AN
+1730 -4.0000(250)AX
+1510 3456 -4.0000(to)AN
+1642 -4.0000(error)AX
+1906 -4.0000(on)AX
+2038 -4.0000(+EYEALL)AX
+2390(&)X
+2478 -4.0000(eyeflag)AX
+2922 -4.0000(/*)AX
+3054 -4.0000(start)AX
+3318 -4.0000(checking)AX
+3714 -4.0000(for)AX
+3890 -4.0000(eye)AX
+4066 -4.0000(*/)AX
+1510 3552 -4.0000(to)AN
+1642 -4.0000(stimon)AX
+1157 3648 -4.0000(stimon:)AN
+1510 3744 -4.0000(code)AN
+1730 -4.0000(STIMCD)AX
+1510 3840 -4.0000(do)AN
+1642 -4.0000(dio_on\(BACKLT\))AX
+1510 3936 -4.0000(to)AN
+1642 -4.0000(error)AX
+1906 -4.0000(on)AX
+2038 -4.0000(+EYEALL)AX
+2390(&)X
+2478 -4.0000(eyeflag)AX
+1510 4032 -4.0000(to)AN
+1642 -4.0000(wdchange)AX
+1157 4128 -4.0000(wdchange:)AN
+1510 4224 -4.0000(do)AN
+1642 -4.0000(set_wsiz\(1\))AX
+2569 -4.0000(/*)AX
+2701 -4.0000(flag)AX
+2921 -4.0000(true)AX
+3141 -4.0000(for)AX
+3317 -4.0000(ramp)AX
+3537 -4.0000(sizes)AX
+3801 -4.0000(*/)AX
+1510 4320 -4.0000(rl)AN
+1642 -4.0000(50)AX
+1510 4416 -4.0000(to)AN
+1642 -4.0000(setpres)AX
+1157 4512 -4.0000(setpres:)AN
+1510 4704 -4.0000(/*)AN
+1554 4800(*)N
+1642 -4.0000(Compute)AX
+1994 -4.0000(time)AX
+2214 -4.0000(until)AX
+2478 -4.0000(ramp)AX
+2698 -4.0000(is)AX
+2830 -4.0000(completed.)AX
+3358 -4.0000(Args)AX
+3578 -4.0000(to)AX
+1554 4896(*)N
+1642 -4.0000(ramptset)AX
+2038 -4.0000(action)AX
+2346 -4.0000(are)AX
+2522(a)X
+2610 -4.0000(preset)AX
+2918 -4.0000(and)AX
+3094 -4.0000(random.)AX
+1554 4992 -4.0000(*/)AN
+1510 5088 -4.0000(do)AN
+1642 -4.0000(ramptset\(RAMP0,)AX
+2346 -4.0000(80,)AX
+2522 -4.0000(20\))AX
+1510 5184 -4.0000(to)AN
+1642 -4.0000(error)AX
+1906 -4.0000(on)AX
+2038 -4.0000(+EYEALL)AX
+2390(&)X
+2478 -4.0000(eyeflag)AX
+1510 5280 -4.0000(to)AN
+1642 -4.0000(fpoff)AX
+1906 -4.0000(on)AX
+2038 -4.0000(+RA_TIMEDONE)AX
+2610(&)X
+2698 -4.0000(ramp[RAMP0].ra_rampflag)AX
+1157 5376 -4.0000(fpoff:)AN
+1510 5472 -4.0000(code)AN
+1730 -4.0000(FPOFFCD)AX
+1510 5568 -4.0000(do)AN
+1642 -4.0000(dio_off\(LED1\))AX
+1510 5664 -4.0000(to)AN
+1642 -4.0000(stoff)AX
+1157 5760 -4.0000(stoff:)AN
+
+13 p
+%%Page: 13 13
+10 s 10 xH 0 xS 7 f
+1 f
+9 s
+2056 384(Chapter)N
+2362(2:)X
+2488(SPOT-)X
+2742(A)X
+2827(State)X
+3037(Process)X
+3320(Translator)X
+3709(for)X
+3834(REX)X
+10 s
+4174(13)X
+10 f
+806 424(h)N
+822(hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh)X
+7 f
+1510 672 -4.0000(code)AN
+1730 -4.0000(STOFFCD)AX
+1510 768 -4.0000(do)AN
+1642 -4.0000(dio_off\(BACKLT\))AX
+1510 864 -4.0000(to)AN
+1642 -4.0000(closew)AX
+1157 960 -4.0000(closew:)AN
+1510 1056 -4.0000(do)AN
+1642 -4.0000(awind\(CLOSE_W\))AX
+1510 1152 -4.0000(to)AN
+1642 -4.0000(wdback)AX
+1157 1248 -4.0000(wdback:)AN
+1510 1344 -4.0000(do)AN
+1642 -4.0000(set_wsiz\(0\))AX
+2569 -4.0000(/*)AX
+2701 -4.0000(flag)AX
+2921 -4.0000(false)AX
+3185 -4.0000(for)AX
+3361 -4.0000(fixation)AX
+3757 -4.0000(sizes)AX
+4021 -4.0000(*/)AX
+1510 1440 -4.0000(to)AN
+1642 -4.0000(rewon)AX
+1157 1536 -4.0000(rewon:)AN
+1510 1632 -4.0000(do)AN
+1642 -4.0000(dio_on\(BEEP\))AX
+1510 1728 -4.0000(time)AN
+1730 -4.0000(35)AX
+1510 1824 -4.0000(to)AN
+1642 -4.0000(rewoff)AX
+1157 1920 -4.0000(rewoff:)AN
+1510 2016 -4.0000(do)AN
+1642 -4.0000(dio_off\(BEEP\))AX
+1510 2112 -4.0000(to)AN
+1642 -4.0000(stopramp)AX
+1157 2208 -4.0000(stopramp:)AN
+1510 2304 -4.0000(do)AN
+1642 -4.0000(rampstop\(1\))AX
+2569 -4.0000(/*)AX
+2701 -4.0000(stop)AX
+2921 -4.0000(ramp;)AX
+3185 -4.0000(move)AX
+3405 -4.0000(to)AX
+3537 -4.0000(0,0)AX
+3713 -4.0000(*/)AX
+1510 2400 -4.0000(rl)AN
+1642 -4.0000(+5)AX
+1510 2496 -4.0000(to)AN
+1642 -4.0000(correct)AX
+1157 2592 -4.0000(correct:)AN
+1510 2688 -4.0000(do)AN
+1642 -4.0000(score\(YES\))AX
+1510 2784 -4.0000(to)AN
+1642 -4.0000(first)AX
+1157 2880 -4.0000(error:)AN
+2569 -4.0000(/*)AX
+2701 -4.0000(abort)AX
+2965 -4.0000(trial)AX
+3229 -4.0000(*/)AX
+1510 2976 -4.0000(do)AN
+1642 -4.0000(awind\(CANCEL_W\))AX
+1510 3072 -4.0000(to)AN
+1642 -4.0000(reset)AX
+1157 3168 -4.0000(reset:)AN
+1510 3264 -4.0000(code)AN
+1730 -4.0000(ERR1CD)AX
+1510 3360 -4.0000(do)AN
+1642 -4.0000(reset_s\(-1\))AX
+1510 3456 -4.0000(to)AN
+1642 -4.0000(wrong)AX
+1157 3552 -4.0000(wrong:)AN
+1510 3648 -4.0000(do)AN
+1642 -4.0000(score\(NO\))AX
+1510 3744 -4.0000(to)AN
+1642 -4.0000(first)AX
+804 3840 -4.0000(abort)AN
+1157 -4.0000(list:)AX
+1510 3936 -4.0000(fpoff)AN
+1774 -4.0000(stoff)AX
+2038 -4.0000(rewoff)AX
+2346 -4.0000(stopramp)AX
+2742 -4.0000(wdback)AX
+3050 -4.0000(closew)AX
+804 4032(})N
+804 4224 -4.0000(/*)AN
+848 4320(*)N
+1157 -4.0000(Ramp)AX
+1377 -4.0000(timing)AX
+1685 -4.0000(state)AX
+1949 -4.0000(set.)AX
+2213 -4.0000(Works)AX
+2477 -4.0000(together)AX
+2873 -4.0000(with)AX
+3093 -4.0000(ra_compute_time\(\))AX
+3885 -4.0000(action.)AX
+848 4416 -4.0000(*/)AN
+804 4512 -4.0000(rampt_set)AN
+1244({)X
+804 4608 -4.0000(status)AN
+1112 -4.0000(ON)AX
+804 4704 -4.0000(begin)AN
+1157 -4.0000(ramptw:)AX
+1510 4800 -4.0000(to)AN
+1642 -4.0000(timeramp)AX
+2038 -4.0000(on)AX
+2170 -4.0000(+RA_TIMESTART)AX
+2786(&)X
+2874 -4.0000(ramp[RAMP0].ra_rampflag)AX
+1157 4896 -4.0000(timeramp:)AN
+1510 5088 -4.0000(/*)AN
+1554 5184(*)N
+1642 -4.0000(The)AX
+1818 -4.0000(escape)AX
+2126 -4.0000(time)AX
+2346 -4.0000(for)AX
+2522 -4.0000(this)AX
+2742 -4.0000(state)AX
+3006 -4.0000(is)AX
+3138 -4.0000(computed)AX
+3534 -4.0000(by)AX
+3666 -4.0000(ramptset\(\))AX
+1554 5280(*)N
+1642 -4.0000(action)AX
+1950 -4.0000(each)AX
+2170 -4.0000(time)AX
+2390 -4.0000(it)AX
+2522 -4.0000(is)AX
+2654 -4.0000(called.)AX
+1554 5376 -4.0000(*/)AN
+1510 5472 -4.0000(to)AN
+1642 -4.0000(ramptw)AX
+1950 -4.0000(on)AX
+2082 -4.0000(-RA_TIMESTART)AX
+2698(&)X
+2786 -4.0000(ramp[RAMP0].ra_rampflag)AX
+1510 5568 -4.0000(to)AN
+1642 -4.0000(ramptd)AX
+1157 5664 -4.0000(ramptd:)AN
+1510 5760 -4.0000(code)AN
+1730 -4.0000(RTDONECD)AX
+
+14 p
+%%Page: 14 14
+10 s 10 xH 0 xS 7 f
+1 f
+9 s
+2056 384(Chapter)N
+2362(2:)X
+2488(SPOT-)X
+2742(A)X
+2827(State)X
+3037(Process)X
+3320(Translator)X
+3709(for)X
+3834(REX)X
+10 s
+4174(14)X
+10 f
+806 424(h)N
+822(hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh)X
+7 f
+1510 672 -4.0000(do)AN
+1642 -4.0000(ramptd\(RAMP0\))AX
+2258 -4.0000(/*)AX
+2390 -4.0000(this)AX
+2610 -4.0000(action)AX
+2918 -4.0000(will)AX
+3138 -4.0000(set)AX
+3314 -4.0000(RA_TIMEDONE)AX
+ -4.0000(bit)AS
+4018 -4.0000(*/)AX
+1510 768 -4.0000(to)AN
+1642 -4.0000(ramptw)AX
+804 864(})N
+804 1056 -4.0000(/*)AN
+848 1152(*)N
+936 -4.0000(Marks)AX
+1200 -4.0000(test)AX
+1420 -4.0000(set.)AX
+848 1248 -4.0000(*/)AN
+804 1344 -4.0000(marks_set)AN
+1244({)X
+804 1440 -4.0000(status)AN
+1112 -4.0000(ON)AX
+804 1536 -4.0000(begin)AN
+1157 -4.0000(mfirst:)AX
+1510 1632 -4.0000(to)AN
+1642 -4.0000(msecond)AX
+1157 1728 -4.0000(msecond:)AN
+1510 1824 -4.0000(do)AN
+1642 -4.0000(newmark\(\))AX
+1510 1920 -4.0000(time)AN
+1730 -4.0000(3000)AX
+1510 2016 -4.0000(to)AN
+1642 -4.0000(mthird)AX
+1157 2112 -4.0000(mthird:)AN
+1510 2208 -4.0000(do)AN
+1642 -4.0000(newstring\(\))AX
+1510 2304 -4.0000(to)AN
+1642 -4.0000(mfirst)AX
+804 2400(})N
+
+14 p
+%%Trailer
+xt
+
+xs

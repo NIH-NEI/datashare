@@ -1,0 +1,22 @@
+/*
+ *  NOTICE:  This code was developed by the Laboratory of
+ *  Sensorimotor Research in the National Eye Institute,
+ *  a branch of the U.S. Government.  This code is
+ *  distributed without copyright restrictions.  No
+ *  individual, company, organization, etc., may copyright
+ *  this code.  If it is passed on to others, this notice
+ *  must be included.
+ *  
+ *  Any Modifications to this code, especially bug fixes,
+ *  should be reported to LOPTICAN@NIH.GOV.
+ * 
+ *  Lance M. Optican, Ph.D.
+ *  Laboratory of Sensorimotor Research
+ *  Bldg 49 Rm 2A50
+ *  National Eye Institute, NIH
+ *  9000 Rockville Pike, Bethesda, MD, 20892-4435
+ *  (301) 496-9375.
+ * 
+ *  May 17, 1999
+ *-----------------------------------------------------------------------*
+ */
